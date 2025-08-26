@@ -1,0 +1,14 @@
+:root {
+  --color-white: #ffffff;
+  --color-black: rgba(0, 0, 0, 0.8);
+  --color-primary: rgba(119, 109, 255, 0.8);
+  --color-error: #ff5f5f;
+  --color-blob: #c4c4c4;
+  --colore-input-text: #7b7b7b;
+}
+
+body {
+  background-color: var(--color-white);
+  margin: 0;
+  font-family: Arial, sans-serif;
+}

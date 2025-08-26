@@ -1,0 +1,60 @@
+name: Testing Backend
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend.yml'
+
+defaults:
+  run:
+    working-directory: ./backend
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-project
+      - name: install dev dependencies
+        run: |
+          task install-dev-deps
+        shell: bash
+      - run: task lint
+        
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-project
+      - name: install dev dependencies
+        run: |
+          task install-dev-deps
+        shell: bash
+      - uses: actions/checkout@v4
+        with:
+          repository: johnmakarov/api-coverage-by-swagger
+          path: swagger-coverage
+      - run: uv run uvicorn src.main:app --port 8080 &
+        working-directory: ./swagger-coverage
+      - run: docker compose up -d
+      - run: uv run pytest --create-db --reuse-db --exitfirst --env=ci --alluredir=allure-results
+      - run: |
+          mkdir -p public
+          mv coverage_report.html public/
+      - uses: simple-elf/allure-report-action@v1.7
+        if: always()
+        with:
+          allure_results: allure-results
+          allure_report: public/allure-report
+      - uses: peaceiris/actions-gh-pages@v4
+        if: always() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: public
