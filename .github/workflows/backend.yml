@@ -36,4 +36,5 @@ jobs:
         run: |
           task install-dev-deps
         shell: bash
+      - run: docker compose up -d
       - run: uv run pytest --create-db --reuse-db --exitfirst --alluredir=allure-results
