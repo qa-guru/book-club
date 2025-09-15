@@ -1,8 +1,5 @@
 # 📚 API для книжного клуба
 
-[![Покрытие тестами](https://img.shields.io/badge/Покрытие_тестами-Смотреть_отчет-blue)](https://johnmakarov.github.io/book-club-api/coverage_report.html)
-[![Allure отчет](https://img.shields.io/badge/Allure_отчет-Смотреть_отчет-blue)](https://johnmakarov.github.io/book-club-api/allure-report/index.html)
-
 ## 🚀 Запуск проекта
 
 ### 🐳 Вариант с Docker
@@ -38,11 +35,6 @@ docker compose up -d
    ```
 
 Вы можете просмотреть доступные команды введя ```task``` в свой терминал
-
-## 🐘 Тесты
-
-После запуска тестов вы можете просмотреть отчет о покрытии API автотестами
-открыв index.html файл в корне проекта используя ```open index.html``` или альтернативу для вашей OS.
 
 ## 🏗 Структура проекта
 
