@@ -36,7 +36,7 @@ def pytest_fixture_setup(fixturedef: pytest.FixtureDef, request: pytest.FixtureR
 def pytest_runtest_makereport(item: pytest.Item, call: pytest.CallInfo) -> None:
     if call.when == "call":
         test_name = item.name.replace("test_", "").replace("_", " ").capitalize()
-        allure.dynamic.title(test_name)  # type:ignore [no-untyped-call]
+        allure.dynamic.title(test_name)  # type: ignore[no-untyped-call]
 
 
 @pytest.fixture
