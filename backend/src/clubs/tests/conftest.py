@@ -1,7 +1,6 @@
 import os
 from typing import Any, cast
 
-import httpx
 import pytest
 from faker import Faker
 
