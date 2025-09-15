@@ -47,19 +47,9 @@ def user_request_data() -> dict[Any, Any]:
     return UserRegister(username=username, password=password).model_dump()
 
 
-def pytest_addoption(parser: pytest.Parser) -> None:
-    parser.addoption(
-        "--env",
-        action="store",
-        default="dev",
-        help="Переменная для запуска тестов на разных окружениях: dev, prod, ci",
-    )
-
-
 @pytest.fixture(scope="session", autouse=True)
-def load_env(request: pytest.FixtureRequest) -> None:
-    env = request.config.getoption("--env")
-    env_file = Path(f"env/.env.{env}")
+def load_env() -> None:
+    env_file = Path(__file__).parent / "env" / ".env"
 
     if Path.exists(env_file):
         load_dotenv(env_file)

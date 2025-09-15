@@ -8,7 +8,7 @@ env = environ.Env(
     CI=(bool, False),
 )
 
-envpath = SRC_DIR / "app" / ".env"
+envpath = SRC_DIR / "env" / ".env"
 
 if envpath.exists():
     env.read_env(envpath)

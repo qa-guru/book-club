@@ -92,27 +92,3 @@ def club(authenticated_clubs_api: ClubsApi, club_request_data):
     got = authenticated_clubs_api.post_api_v1_clubs_with_http_info(PatchedClub(**club_request_data))  # type: ignore[arg-type]
     assert got.status_code == 201
     return got
-
-
-@pytest.fixture(scope="session", autouse=True)
-def set_coverage(request):
-    if request.config.getoption("--env") != "ci":
-        yield
-        return
-
-    response = httpx.post(
-        url="http://127.0.0.1:8080/set_urls",
-        json={
-            "base_url": "http://127.0.0.1:8000",
-            "swagger_url": "http://127.0.0.1:8000/api/v1/docs/schema/?format=json",
-        },
-    )
-    assert response.status_code == 200
-
-    yield
-
-    response = httpx.get("http://127.0.0.1:8080/export/html")
-    assert response.status_code == 200
-
-    with open("coverage_report.html", "w", encoding="utf-8") as f:
-        f.write(response.text)

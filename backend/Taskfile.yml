@@ -32,10 +32,11 @@ tasks:
       - uv run mypy src
       - uv run toml-sort --check pyproject.toml
       - uv run pymarkdown scan README.md
-      - uv run dotenv-linter src/app/.env
+      - uv run dotenv-linter src/env/.env
 
   test:
     cmds:
+      - mkdir static
       - uv run pytest --dead-fixtures
       - uv run pytest --create-db --reuse-db --exitfirst -n {{.SIMULTANEOUS_TEST_JOBS}} --alluredir=allure-results
 
