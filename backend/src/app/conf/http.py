@@ -5,7 +5,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "http://127.0.0.1",
-    "https://bookclub.qa.guru",
+    "http://bookclub.qa.guru",
     "http://bookclub.qa.guru:8000",
 ]
 
@@ -22,6 +22,6 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "http://127.0.0.1",
-    "https://bookclub.qa.guru",
+    "http://bookclub.qa.guru",
     "http://bookclub.qa.guru:8000",
 ]
