@@ -3,6 +3,7 @@ x-default-build-args: &default-build-args
   PYTHON_VERSION: "3.12"
 
 x-default-environment: &default-environment
+  BASE_URL: http://bookclub.qa.guru
   DATABASE_URL: postgres://postgres@postgres:5432/postgres
 
 services:
@@ -33,6 +34,8 @@ services:
       target: web
       args: *default-build-args
     environment: *default-environment
+    ports:
+      - "8000:8000"
     networks:
      - bookclub
     depends_on: [postgres]
