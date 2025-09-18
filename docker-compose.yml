@@ -11,7 +11,9 @@ services:
       context: ./frontend
       dockerfile: ./Dockerfile
     ports:
-      - "80:80" 
+      - "80:80"
+    networks:
+     - bookclub
     depends_on:
       - backend
 
@@ -20,8 +22,8 @@ services:
     container_name: db
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
-    ports:
-     - 5432:5432
+    networks:
+     - bookclub
     command: --autovacuum=off --fsync=off --synchronous_commit=off --full_page_writes=off --work_mem=12MB --max-connections=10 --max_wal_senders=0
 
   backend:
@@ -31,6 +33,9 @@ services:
       target: web
       args: *default-build-args
     environment: *default-environment
-    ports:
-      - 8000:8000
+    networks:
+     - bookclub
     depends_on: [postgres]
+
+networks:
+  bookclub:
