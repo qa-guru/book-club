@@ -5,7 +5,7 @@ import router from './router'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
-axios.defaults.baseURL = "http://bookclub.qa.guru:8000"
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN'
