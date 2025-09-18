@@ -5,7 +5,7 @@ import router from './router'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
-axios.defaults.baseURL = 'http://localhost:8000'
+axios.defaults.baseURL = "http://bookclub.qa.guru:8000"
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN'
