@@ -36,8 +36,8 @@ tasks:
 
   test:
     cmds:
-      - uv run pytest --dead-fixtures
-      - uv run pytest --create-db --reuse-db --exitfirst -n {{.SIMULTANEOUS_TEST_JOBS}} --alluredir=allure-results
+      - uv run pytest src/clubs --dead-fixtures
+      - uv run pytest src/clubs --create-db --reuse-db --exitfirst -n {{.SIMULTANEOUS_TEST_JOBS}} --alluredir=allure-results
 
   csu:
     cmds:

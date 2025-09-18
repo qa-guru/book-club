@@ -15,7 +15,7 @@ from clients.http.book_club.models.api_models import UserRegister
 
 fake = Faker()
 
-pytest_plugins = ["app.fixtures", "users.fixtures"]
+pytest_plugins = ["users.fixtures"]
 
 
 def allure_logger(config: pytest.Config) -> AllureReporter:
