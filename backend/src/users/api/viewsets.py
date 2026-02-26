@@ -40,7 +40,7 @@ class SelfView(GenericAPIView):
         if user.pk != request.user.pk:
             return Response({"detail": "You can only delete your own account."}, status=status.HTTP_403_FORBIDDEN)
 
-        serializer = self.get_serializer(user, data=request.data, partial=True)
+        serializer = self.get_serializer(user, data=request.data, partial=False)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 

@@ -17,6 +17,12 @@ class UserSerializer(serializers.ModelSerializer):
             "remote_addr",
         ]
 
+        extra_kwargs = {
+            'first_name': {'required': True}, 
+            'last_name': {'required': True},  
+            'email': {'required': True},      
+        }
+
     def get_remote_addr(self, obj: User) -> str:
         return self.context["request"].META["REMOTE_ADDR"]
 
