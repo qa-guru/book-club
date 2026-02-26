@@ -120,6 +120,23 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+
+  const updateUser = async (userData: Partial<User>) => {
+    if (!accessToken.value) {
+      throw new Error('No access token')
+    }
+
+    try {
+      const response = await axios.patch<User>('/api/v1/users/me/', userData)
+      user.value = response.data
+      saveState()
+      return response.data
+    } catch (error) {
+      console.error('Failed to update user:', error)
+      throw error
+    }
+  }
+
   const refreshTokens = async (): Promise<boolean> => {
     if (!refreshToken.value) {
       logout()
@@ -168,6 +185,7 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     logout,
     fetchUser,
+    updateUser,
     refreshTokens,
     loadState,
     setPendingClubJoin,
