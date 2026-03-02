@@ -12,7 +12,7 @@ services:
       context: ./frontend
       dockerfile: ./Dockerfile
     ports:
-      - "80:80"
+      - "8100:80"
     networks:
      - bookclub
     depends_on:
