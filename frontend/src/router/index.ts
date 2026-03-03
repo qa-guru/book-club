@@ -18,6 +18,24 @@ const router = createRouter({
       meta: { title: 'Регистрация' },
     },
     {
+      path: '/clubs/create',
+      name: 'create-club',
+      component: () => import('@/views/CreateClub.vue'),
+      meta: {
+        requiresAuth: true,
+        title: 'Создание клуба',
+      },
+    },
+    {
+      path: '/clubs/:id/edit',
+      name: 'edit-club',
+      component: () => import('@/views/EditClub.vue'),
+      meta: {
+        requiresAuth: true,
+        title: 'Редактирование клуба',
+      },
+    },
+    {
       path: '/clubs/:id',
       name: 'club-details',
       component: () => import('@/views/ClubDetails.vue'),
@@ -41,24 +59,6 @@ const router = createRouter({
       component: () => import('@/views/ClubCards.vue'),
       meta: { title: 'Клубы' },
     },
-    {
-      path: '/clubs/create',
-      name: 'create-club',
-      component: () => import('@/views/CreateClub.vue'),
-      meta: {
-        requiresAuth: true,
-        title: 'Создание клуба',
-      },
-    },
-    {
-      path: '/clubs/:id/edit',
-      name: 'edit-club',
-      component: () => import('@/views/EditClub.vue'),
-      meta: {
-        requiresAuth: true,
-        title: 'Редактирование клуба',
-      },
-    },
   ],
 })
 
@@ -73,7 +73,7 @@ router.beforeEach(async (to, from, next) => {
   if (to.name === 'edit-club' && to.params.id) {
     const response = await axios.get(`/api/v1/clubs/${to.params.id}/`)
 
-    if (String(response.data.owner) !== String(authStore.user?.id)) {
+    if (String(response.data.owner.id) !== String(authStore.user?.id)) {
       next({ name: 'clubs' })
       return
     }

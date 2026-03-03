@@ -120,7 +120,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-
   const updateUser = async (userData: Partial<User>) => {
     if (!accessToken.value) {
       throw new Error('No access token')

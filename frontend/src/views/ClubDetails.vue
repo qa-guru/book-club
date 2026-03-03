@@ -1,30 +1,62 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import axios from 'axios'
+import { useClubsStore } from '@/stores/clubs'
+import { useReviewsStore } from '@/stores/reviews'
+import ClubReviews from '@/components/ClubReviews.vue'
 import type { Club } from '@/types/clubs'
 
 const route = useRoute()
 const router = useRouter()
+
 const authStore = useAuthStore()
+const clubsStore = useClubsStore()
+const reviewsStore = useReviewsStore()
 
 const club = ref<Club | null>(null)
+const isLoading = ref(false)
+const error = ref('')
 
 const fetchClub = async () => {
-  const response = await axios.get(`/api/v1/clubs/${route.params.id}/`)
-  club.value = response.data
+  isLoading.value = true
+  error.value = ''
+  try {
+    club.value = await clubsStore.fetchClub(route.params.id)
+  } catch (err) {
+    error.value = 'Не удалось загрузить информацию о клубе'
+  } finally {
+    isLoading.value = false
+  }
 }
 
 const joinClub = async () => {
-  await axios.post(`/api/v1/clubs/${route.params.id}/members/me/`)
-  await fetchClub()
+  try {
+    await clubsStore.joinClub(route.params.id)
+    await fetchClub()
+  } catch (err) {
+    error.value = 'Не удалось присоединиться к клубу'
+  }
 }
 
 const leaveClub = async () => {
-  await axios.delete(`/api/v1/clubs/${route.params.id}/members/me/`)
-  router.push('/')
+  if (!confirm('Вы уверены, что хотите покинуть клуб?')) return
+
+  try {
+    await clubsStore.leaveClub(route.params.id)
+    router.push('/')
+  } catch (err) {
+    error.value = 'Не удалось покинуть клуб'
+  }
 }
+
+const isMember = computed(() => {
+  return authStore.user?.id && club.value?.members.includes(authStore.user.id)
+})
+
+const isOwner = computed(() => {
+  return authStore.user?.id === club.value?.owner?.id
+})
 
 onMounted(() => {
   fetchClub()
@@ -33,7 +65,10 @@ onMounted(() => {
 
 <template>
   <div class="club-details">
-    <div v-if="club" class="club-content">
+    <div v-if="isLoading" class="loading">Загрузка...</div>
+    <div v-else-if="error" class="error">{{ error }}</div>
+
+    <div v-else-if="club" class="club-content">
       <div class="club-header">
         <h1>{{ club.bookTitle }}</h1>
         <span class="year">{{ club.publicationYear }}</span>
@@ -53,35 +88,32 @@ onMounted(() => {
         </a>
 
         <template v-if="authStore.isAuthenticated">
-          <button
-            v-if="authStore.user?.id && !club.members.includes(authStore.user.id)"
-            @click="joinClub"
-            class="join-btn"
-          >
+          <button v-if="!isMember && !isOwner" @click="joinClub" class="join-btn">
             Присоединиться
           </button>
 
-          <button
-            v-if="
-              authStore.user?.id &&
-              club.members.includes(authStore.user.id) &&
-              club.owner !== authStore.user.id
-            "
-            @click="leaveClub"
-            class="leave-btn"
-          >
+          <button v-if="isMember && !isOwner" @click="leaveClub" class="leave-btn">
             Покинуть клуб
           </button>
 
-          <router-link
-            v-if="club.owner === authStore.user?.id"
-            :to="`/clubs/${club.id}/edit`"
-            class="edit-btn"
-          >
+          <router-link v-if="isOwner" :to="`/clubs/${club.id}/edit`" class="edit-btn">
             Редактировать клуб
           </router-link>
         </template>
       </div>
+
+      <div class="club-stats">
+        <div class="stat-item">
+          <span class="stat-label">Участников:</span>
+          <span class="stat-value">{{ club.members.length }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Отзывов:</span>
+          <span class="stat-value">{{ club.reviews?.length || 0 }}</span>
+        </div>
+      </div>
+
+      <ClubReviews :club-id="club.id" :club-members="club.members" :club-owner="club.owner?.id" />
     </div>
   </div>
 </template>
@@ -150,6 +182,32 @@ onMounted(() => {
   line-height: 1.6;
   margin-bottom: 2.5rem;
   white-space: pre-line;
+}
+
+.club-stats {
+  display: flex;
+  gap: 2rem;
+  margin: 2rem 0;
+  padding: 1.5rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stat-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--color-primary);
 }
 
 .club-actions {
@@ -224,6 +282,11 @@ onMounted(() => {
   .year {
     margin-left: 0;
     margin-top: 0.75rem;
+  }
+
+  .club-stats {
+    flex-direction: column;
+    gap: 1rem;
   }
 
   .club-actions {

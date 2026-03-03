@@ -64,7 +64,6 @@ const onSubmit = handleSubmit(async (values) => {
     router.push({ name: 'clubs' })
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.data) {
-      // Обработка ошибок сервера
       console.error('Server validation errors:', error.response.data)
     }
     console.error('Error saving club:', error)

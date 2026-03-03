@@ -78,3 +78,6 @@ class ReviewViewSet(ModelViewSet):
     queryset = BookReview.objects.all()
     serializer_class = BookReviewSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

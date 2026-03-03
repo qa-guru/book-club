@@ -4,13 +4,22 @@ from clubs.models import Club, BookReview
 
 User = get_user_model()
 
+
 class OwnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "username", "email"]
+        fields = ["id", "username"]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username"]
 
 
 class BookReviewSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = BookReview
         fields = ["id", "club", "user", "review", "assessment", "read_pages"]

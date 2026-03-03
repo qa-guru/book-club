@@ -16,7 +16,7 @@ const editForm = ref({
   username: '',
   firstName: '',
   lastName: '',
-  email: ''
+  email: '',
 })
 
 // Инициализация формы данными пользователя
@@ -26,7 +26,7 @@ onMounted(() => {
       username: authStore.user.username || '',
       firstName: authStore.user.firstName || '',
       lastName: authStore.user.lastName || '',
-      email: authStore.user.email || ''
+      email: authStore.user.email || '',
     }
   }
 })
@@ -46,13 +46,13 @@ const cancelEditing = () => {
   isEditing.value = false
   error.value = ''
   success.value = ''
-  
+
   if (authStore.user) {
     editForm.value = {
       username: authStore.user.username || '',
       firstName: authStore.user.firstName || '',
       lastName: authStore.user.lastName || '',
-      email: authStore.user.email || ''
+      email: authStore.user.email || '',
     }
   }
 }
@@ -65,7 +65,7 @@ const updateProfile = async () => {
   try {
     // Подготавливаем данные для отправки (только измененные поля)
     const updatedData: Record<string, string> = {}
-    
+
     if (editForm.value.username !== authStore.user?.username) {
       updatedData.username = editForm.value.username
     }
@@ -86,7 +86,7 @@ const updateProfile = async () => {
     } else {
       success.value = 'Нет изменений для сохранения'
     }
-    
+
     isEditing.value = false
   } catch (err: any) {
     if (err.response?.data) {
@@ -138,8 +138,6 @@ const updateProfile = async () => {
             <span class="label">Email:</span>
             <span class="value">{{ authStore.user.email }}</span>
           </div>
-
-          
         </div>
 
         <div class="action-buttons">
@@ -186,31 +184,17 @@ const updateProfile = async () => {
 
           <div class="form-group">
             <label for="email">Email</label>
-            <input
-              v-model="editForm.email"
-              type="email"
-              id="email"
-              placeholder="Введите email"
-            />
+            <input v-model="editForm.email" type="email" id="email" placeholder="Введите email" />
           </div>
 
           <div v-if="error" class="error">{{ error }}</div>
           <div v-if="success" class="success">{{ success }}</div>
 
           <div class="form-actions">
-            <button 
-              type="submit" 
-              class="save-btn" 
-              :disabled="isLoading"
-            >
+            <button type="submit" class="save-btn" :disabled="isLoading">
               {{ isLoading ? 'Сохранение...' : 'Сохранить' }}
             </button>
-            <button 
-              type="button" 
-              class="cancel-btn" 
-              @click="cancelEditing"
-              :disabled="isLoading"
-            >
+            <button type="button" class="cancel-btn" @click="cancelEditing" :disabled="isLoading">
               Отмена
             </button>
           </div>
