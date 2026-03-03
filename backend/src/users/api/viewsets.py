@@ -32,7 +32,6 @@ class SelfView(GenericAPIView):
         user.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
 
     def put(self, request: AuthenticatedRequest) -> Response:
         user = self.get_object()
@@ -45,7 +44,7 @@ class SelfView(GenericAPIView):
         serializer.save()
 
         return Response(serializer.data)
-    
+
     def patch(self, request: AuthenticatedRequest) -> Response:
         user = self.get_object()
 

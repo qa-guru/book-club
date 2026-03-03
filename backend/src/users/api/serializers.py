@@ -18,9 +18,9 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
         extra_kwargs = {
-            'first_name': {'required': True}, 
-            'last_name': {'required': True},  
-            'email': {'required': True},      
+            "first_name": {"required": True},
+            "last_name": {"required": True},
+            "email": {"required": True},
         }
 
     def get_remote_addr(self, obj: User) -> str:

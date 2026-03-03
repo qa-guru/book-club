@@ -11,8 +11,8 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from clubs.api.v1.filters import ClubFilter
-from clubs.api.v1.serializers import ClubSerializer
-from clubs.models import Club
+from clubs.api.v1.serializers import ClubSerializer, BookReviewSerializer
+from clubs.models import Club, BookReview
 
 
 User = get_user_model()
@@ -72,3 +72,9 @@ class ClubViewSet(ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response({"detail": "Method not allowed."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+class ReviewViewSet(ModelViewSet):
+    queryset = BookReview.objects.all()
+    serializer_class = BookReviewSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
