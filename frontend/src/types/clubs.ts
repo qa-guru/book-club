@@ -1,5 +1,16 @@
 import type { User } from './users'
 
+export interface BookReview {
+  id: number
+  club: number
+  user: User
+  username?: string
+  review: string
+  assessment: number
+  readPages?: number
+  createdAt?: string
+}
+
 export interface Club {
   id: number
   bookTitle: string
@@ -9,6 +20,7 @@ export interface Club {
   telegramChatLink: string
   owner: User
   members: number[]
+  reviews: BookReview[]
 }
 
 export interface PaginatedClubList {
@@ -18,16 +30,6 @@ export interface PaginatedClubList {
   results: Club[]
 }
 
-export interface BookReview {
-  id: number
-  club: number
-  user: User
-  username?: string
-  review: string
-  assessment: number
-  readPages: number
-  createdAt?: string
-}
 
 export interface PaginatedBookReviewList {
   count: number

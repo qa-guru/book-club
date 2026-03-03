@@ -23,8 +23,8 @@ const success = ref('')
 
 const reviewForm = ref({
   review: '',
-  assessment: null,
-  readPages: null,
+  assessment: 5,
+  readPages: 0,
 })
 
 const userReview = ref<BookReview | null>(null)
@@ -70,7 +70,7 @@ const startEdit = (review: BookReview) => {
   reviewForm.value = {
     review: review.review,
     assessment: review.assessment,
-    readPages: review.readPages,
+    readPages: review.readPages ?? 0,
   }
   error.value = ''
   success.value = ''

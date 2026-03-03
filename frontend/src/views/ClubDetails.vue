@@ -22,7 +22,7 @@ const fetchClub = async () => {
   isLoading.value = true
   error.value = ''
   try {
-    club.value = await clubsStore.fetchClub(route.params.id)
+    club.value = await clubsStore.fetchClub(Number(route.params.id))
   } catch (err) {
     error.value = 'Не удалось загрузить информацию о клубе'
   } finally {
@@ -32,7 +32,7 @@ const fetchClub = async () => {
 
 const joinClub = async () => {
   try {
-    await clubsStore.joinClub(route.params.id)
+    await clubsStore.joinClub(Number(route.params.id))
     await fetchClub()
   } catch (err) {
     error.value = 'Не удалось присоединиться к клубу'
@@ -43,7 +43,7 @@ const leaveClub = async () => {
   if (!confirm('Вы уверены, что хотите покинуть клуб?')) return
 
   try {
-    await clubsStore.leaveClub(route.params.id)
+    await clubsStore.leaveClub(Number(route.params.id))
     router.push('/')
   } catch (err) {
     error.value = 'Не удалось покинуть клуб'
