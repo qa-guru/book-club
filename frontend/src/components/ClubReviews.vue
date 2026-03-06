@@ -3,7 +3,6 @@ import { ref, onMounted, computed } from 'vue'
 import { useReviewsStore } from '@/stores/reviews'
 import { useAuthStore } from '@/stores/auth'
 import type { BookReview } from '@/types/clubs'
-import type { User } from '@/types/users'
 
 const props = defineProps<{
   clubId: number
@@ -109,7 +108,7 @@ const createReview = async () => {
     userReview.value = newReview
     success.value = 'Отзыв успешно создан'
     isCreating.value = false
-  } catch (err) {
+  } catch {
     error.value = 'Ошибка при создании отзыва'
   } finally {
     isLoading.value = false
@@ -142,7 +141,7 @@ const updateReview = async () => {
     success.value = 'Отзыв успешно обновлен'
     isEditing.value = false
     editingReviewId.value = null
-  } catch (err) {
+  } catch {
     error.value = 'Ошибка при обновлении отзыва'
   } finally {
     isLoading.value = false
@@ -160,7 +159,7 @@ const deleteReview = async (reviewId: number) => {
     }
 
     success.value = 'Отзыв успешно удален'
-  } catch (err) {
+  } catch {
     error.value = 'Ошибка при удалении отзыва'
   }
 }

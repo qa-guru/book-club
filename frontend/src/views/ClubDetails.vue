@@ -3,7 +3,6 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useClubsStore } from '@/stores/clubs'
-import { useReviewsStore } from '@/stores/reviews'
 import ClubReviews from '@/components/ClubReviews.vue'
 import type { Club } from '@/types/clubs'
 
@@ -12,7 +11,6 @@ const router = useRouter()
 
 const authStore = useAuthStore()
 const clubsStore = useClubsStore()
-const reviewsStore = useReviewsStore()
 
 const club = ref<Club | null>(null)
 const isLoading = ref(false)
@@ -23,7 +21,7 @@ const fetchClub = async () => {
   error.value = ''
   try {
     club.value = await clubsStore.fetchClub(Number(route.params.id))
-  } catch (err) {
+  } catch {
     error.value = 'Не удалось загрузить информацию о клубе'
   } finally {
     isLoading.value = false
@@ -34,7 +32,7 @@ const joinClub = async () => {
   try {
     await clubsStore.joinClub(Number(route.params.id))
     await fetchClub()
-  } catch (err) {
+  } catch {
     error.value = 'Не удалось присоединиться к клубу'
   }
 }
@@ -45,7 +43,7 @@ const leaveClub = async () => {
   try {
     await clubsStore.leaveClub(Number(route.params.id))
     router.push('/')
-  } catch (err) {
+  } catch {
     error.value = 'Не удалось покинуть клуб'
   }
 }

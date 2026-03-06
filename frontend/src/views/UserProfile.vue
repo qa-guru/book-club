@@ -88,16 +88,21 @@ const updateProfile = async () => {
     }
 
     isEditing.value = false
-  } catch (err: any) {
-    if (err.response?.data) {
-      const errors = err.response.data
-      if (errors.username) {
-        error.value = `Логин: ${errors.username.join(', ')}`
-      } else if (errors.email) {
-        error.value = `Email: ${errors.email.join(', ')}`
-      } else {
-        error.value = 'Ошибка при обновлении профиля'
+  } catch (err: unknown) {
+    const apiError = err as {
+      response?: {
+        data?: {
+          username?: string[]
+          email?: string[]
+        }
       }
+    }
+    const errors = apiError.response?.data
+
+    if (errors?.username) {
+      error.value = `Логин: ${errors.username.join(', ')}`
+    } else if (errors?.email) {
+      error.value = `Email: ${errors.email.join(', ')}`
     } else {
       error.value = 'Ошибка при обновлении профиля'
     }
