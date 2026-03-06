@@ -38,7 +38,7 @@ async function handleSubmit() {
               type="text"
               id="username"
               required
-              placeholder="segfault"
+              placeholder="username"
               data-testid="username-input"
             />
           </div>
@@ -49,7 +49,7 @@ async function handleSubmit() {
               type="password"
               id="password"
               required
-              placeholder="1111"
+              placeholder="password"
               data-testid="password-input"
             />
           </div>
