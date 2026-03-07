@@ -232,6 +232,7 @@ const truncateText = (text: string, maxLength: number = 150) => {
   color: var(--color-error);
   font-weight: var(--weight-medium);
   padding: var(--space-4);
+  text-align: center;
 }
 
 .no-results {
