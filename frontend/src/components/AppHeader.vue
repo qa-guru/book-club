@@ -108,8 +108,11 @@ const closeMenu = () => {
 <style scoped>
 .header {
   background-color: var(--color-surface);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 100;
   padding: var(--space-2) var(--space-4);
   border-bottom: 1px solid rgba(245, 240, 232, 0.08);

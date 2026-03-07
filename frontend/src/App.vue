@@ -31,6 +31,7 @@ main {
   width: 100%;
   margin: 0 auto;
   padding: var(--space-4);
+  padding-top: calc(44px + var(--space-2) * 2 + var(--space-4));
   box-sizing: border-box;
 }
 </style>
