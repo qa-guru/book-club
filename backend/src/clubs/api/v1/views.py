@@ -12,8 +12,8 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from clubs.api.v1.filters import ClubFilter, ReviewFilter
-from clubs.api.v1.serializers import ClubSerializer, BookReviewSerializer
-from clubs.models import Club, BookReview
+from clubs.api.v1.serializers import BookReviewSerializer, ClubSerializer
+from clubs.models import BookReview, Club
 
 
 User = get_user_model()

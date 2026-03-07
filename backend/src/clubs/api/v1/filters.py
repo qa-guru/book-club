@@ -6,7 +6,7 @@ from django.contrib.postgres.search import (
 )
 from django.db.models import QuerySet
 
-from clubs.models import Club, BookReview
+from clubs.models import BookReview, Club
 
 
 User = get_user_model()
