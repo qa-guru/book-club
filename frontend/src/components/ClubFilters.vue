@@ -118,7 +118,7 @@ const applyFilter = (filter: 'all' | 'member' | 'owner') => {
   border: none;
   padding: 0 1.5rem;
   font-size: 1rem;
-  color: var(--colore-input-text);
+  color: var(--color-input-text);
   font-style: italic;
   box-sizing: border-box;
   min-width: 0;

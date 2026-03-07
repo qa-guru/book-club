@@ -6,10 +6,18 @@ from django.contrib.postgres.search import (
 )
 from django.db.models import QuerySet
 
-from clubs.models import Club
+from clubs.models import Club, BookReview
 
 
 User = get_user_model()
+
+
+class ReviewFilter(django_filters.FilterSet):
+    club = django_filters.NumberFilter(field_name="club")
+
+    class Meta:
+        model = BookReview
+        fields = ["club"]
 
 
 class ClubFilter(django_filters.FilterSet):

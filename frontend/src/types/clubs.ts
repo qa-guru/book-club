@@ -8,7 +8,8 @@ export interface BookReview {
   review: string
   assessment: number
   readPages?: number
-  createdAt?: string
+  created?: string
+  modified?: string
 }
 
 export interface Club {

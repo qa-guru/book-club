@@ -7,7 +7,7 @@ import type { BookReview } from '@/types/clubs'
 const props = defineProps<{
   clubId: number
   clubMembers: number[]
-  clubOwner: number
+  clubOwner?: number
 }>()
 
 const reviewsStore = useReviewsStore()
@@ -287,7 +287,7 @@ onMounted(() => {
 
         <div class="review-footer">
           <span class="review-date">
-            {{ formatDate(review.createdAt) }}
+            {{ formatDate(review.created) }}
           </span>
 
           <div v-if="canEditReview(review) && !isEditing && !isCreating" class="review-actions">
@@ -383,7 +383,7 @@ onMounted(() => {
   border-radius: 30px;
   padding: 0 1.5rem;
   font-size: 1rem;
-  color: var(--colore-input-text);
+  color: var(--color-input-text);
   cursor: pointer;
 }
 
@@ -401,7 +401,7 @@ onMounted(() => {
   border-radius: 30px;
   padding: 0 1.5rem;
   font-size: 1rem;
-  color: var(--colore-input-text);
+  color: var(--color-input-text);
   box-sizing: border-box;
 }
 
@@ -412,7 +412,7 @@ onMounted(() => {
   border-radius: 30px;
   padding: 1rem 1.5rem;
   font-size: 1rem;
-  color: var(--colore-input-text);
+  color: var(--color-input-text);
   resize: vertical;
   box-sizing: border-box;
   font-family: inherit;

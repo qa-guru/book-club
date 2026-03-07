@@ -55,17 +55,16 @@ export const useReviewsStore = defineStore('reviews', {
       }
     },
 
-    async fetchClubReviews(clubId: number) {
+    async fetchClubReviews(clubId: number, page: number = 1, pageSize: number = 100) {
       this.isLoading = true
       this.error = null
       try {
         const response = await axios.get<PaginatedBookReviewList>(
-          `/api/v1/clubs/reviews/?page=1&page_size=100`,
+          `/api/v1/clubs/reviews/?club=${clubId}&page=${page}&page_size=${pageSize}`,
         )
-        const clubReviews = response.data.results.filter((review) => review.club === clubId)
         this.clubReviews = {
           ...this.clubReviews,
-          [clubId]: clubReviews,
+          [clubId]: response.data.results,
         }
       } catch (error) {
         this.error = 'Не удалось загрузить отзывы клуба'

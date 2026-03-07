@@ -30,50 +30,47 @@ export const useClubsStore = defineStore('clubs', {
   }),
 
   actions: {
-    async fetchClubs(page: number = 1, pageSize: number = 10) {
+    async _fetchClubsWithParams(
+      params: Record<string, string | number>,
+      errorMessage: string,
+    ) {
       this.isLoading = true
       this.error = null
       try {
+        const searchParams = new URLSearchParams(
+          Object.entries(params).map(([k, v]) => [k, String(v)]),
+        )
         const response = await axios.get<PaginatedClubList>(
-          `/api/v1/clubs/?page=${page}&page_size=${pageSize}`,
+          `/api/v1/clubs/?${searchParams.toString()}`,
         )
         this.clubs = response.data.results
         this.pagination = {
           count: response.data.count,
           next: response.data.next,
           previous: response.data.previous,
-          currentPage: page,
-          pageSize: pageSize,
+          currentPage: (params.page as number) ?? 1,
+          pageSize: (params.page_size as number) ?? 10,
         }
       } catch (error) {
-        this.error = 'Не удалось загрузить список клубов'
+        this.error = errorMessage
         console.error('Error fetching clubs:', error)
       } finally {
         this.isLoading = false
       }
     },
 
+    async fetchClubs(page: number = 1, pageSize: number = 10) {
+      await this._fetchClubsWithParams(
+        { page, page_size: pageSize },
+        'Не удалось загрузить список клубов',
+      )
+    },
+
     async searchClubs(query: string, page: number = 1, pageSize: number = 10) {
-      this.isLoading = true
-      this.error = null
-      try {
-        const response = await axios.get<PaginatedClubList>(
-          `/api/v1/clubs/?search=${encodeURIComponent(query)}&page=${page}&page_size=${pageSize}`,
-        )
-        this.clubs = response.data.results
-        this.pagination = {
-          count: response.data.count,
-          next: response.data.next,
-          previous: response.data.previous,
-          currentPage: page,
-          pageSize: pageSize,
-        }
-      } catch (error) {
-        this.error = 'Ошибка при поиске клубов'
-        console.error('Error searching clubs:', error)
-      } finally {
-        this.isLoading = false
-      }
+      await this._fetchClubsWithParams(
+        { search: query, page, page_size: pageSize },
+        'Ошибка при поиске клубов',
+      )
     },
 
     async filterByMembership(
@@ -81,31 +78,12 @@ export const useClubsStore = defineStore('clubs', {
       page: number = 1,
       pageSize: number = 10,
     ) {
-      this.isLoading = true
-      this.error = null
-      try {
-        let url = `/api/v1/clubs/`
-        if (type !== 'all') {
-          url += `?membership=${type}&page=${page}&page_size=${pageSize}`
-        } else {
-          url += `?page=${page}&page_size=${pageSize}`
-        }
-
-        const response = await axios.get<PaginatedClubList>(url)
-        this.clubs = response.data.results
-        this.pagination = {
-          count: response.data.count,
-          next: response.data.next,
-          previous: response.data.previous,
-          currentPage: page,
-          pageSize: pageSize,
-        }
-      } catch (error) {
-        this.error = 'Ошибка при фильтрации клубов'
-        console.error('Error filtering clubs:', error)
-      } finally {
-        this.isLoading = false
-      }
+      const params: Record<string, string | number> = { page, page_size: pageSize }
+      if (type !== 'all') params.membership = type
+      await this._fetchClubsWithParams(
+        params,
+        'Ошибка при фильтрации клубов',
+      )
     },
 
     async nextPage() {

@@ -26,7 +26,6 @@ class Club(TimestampedModel):
     member_count: Annotated[int, models.Count]
 
     class Meta:
-        unique_together = ("book_title", "book_authors", "publication_year")
         verbose_name = _("Book Club")
         verbose_name_plural = _("Book Clubs")
         ordering = ["id"]

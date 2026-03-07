@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import axios from 'axios'
 import { useForm, Field, ErrorMessage } from 'vee-validate'
 import * as yup from 'yup'
+import { useAuthStore } from '@/stores/auth'
 
 const props = defineProps({
   clubId: {
@@ -20,7 +21,7 @@ const validationSchema = yup.object({
   bookTitle: yup.string().required('Название книги обязательно'),
   bookAuthors: yup.string().required('Автор(ы) книги обязательно'),
   publicationYear: yup.number().typeError('Ага, число').required('Год выпуска обязательно'),
-  description: yup.string().required('Опсисание книги обязательно'),
+  description: yup.string().required('Описание книги обязательно'),
   telegramChatLink: yup
     .string()
     .required('Ссылка на Telegram чат обязательна')
@@ -36,6 +37,11 @@ onMounted(async () => {
     isLoading.value = true
     try {
       const response = await axios.get(`/api/v1/clubs/${props.clubId}/`)
+      const authStore = useAuthStore()
+      if (authStore.user && Number(response.data.owner?.id) !== Number(authStore.user.id)) {
+        router.push({ name: 'clubs' })
+        return
+      }
       setValues({
         bookTitle: response.data.bookTitle,
         bookAuthors: response.data.bookAuthors,
@@ -189,7 +195,7 @@ form {
   border: none;
   padding: 1rem 1.5rem;
   font-size: clamp(0.875rem, 3vw, 1.125rem);
-  color: var(--colore-input-text);
+  color: var(--color-input-text);
   box-sizing: border-box;
 }
 
@@ -204,7 +210,7 @@ form {
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-  color: var(--colore-input-text);
+  color: var(--color-input-text);
   opacity: 1;
   font-style: italic;
 }

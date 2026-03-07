@@ -367,13 +367,13 @@ const updateProfile = async () => {
   border: none;
   padding: 0 1.5rem;
   font-size: clamp(0.875rem, 3vw, 1rem);
-  color: var(--colore-input-text);
+  color: var(--color-input-text);
   font-style: italic;
   box-sizing: border-box;
 }
 
 .form-group input::placeholder {
-  color: var(--colore-input-text);
+  color: var(--color-input-text);
   font-style: italic;
   opacity: 1;
 }

@@ -86,7 +86,7 @@ onMounted(() => {
 
         <div class="review-footer">
           <span class="review-date">
-            {{ formatDate(review.createdAt) }}
+            {{ formatDate(review.created) }}
           </span>
         </div>
       </div>

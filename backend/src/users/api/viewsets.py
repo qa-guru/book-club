@@ -25,32 +25,18 @@ class SelfView(GenericAPIView):
 
     def delete(self, request: AuthenticatedRequest) -> Response:
         user = self.get_object()
-
-        if user.pk != request.user.pk:
-            return Response({"detail": "You can only delete your own account."}, status=status.HTTP_403_FORBIDDEN)
-
         user.delete()
-
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def put(self, request: AuthenticatedRequest) -> Response:
         user = self.get_object()
-
-        if user.pk != request.user.pk:
-            return Response({"detail": "You can only delete your own account."}, status=status.HTTP_403_FORBIDDEN)
-
         serializer = self.get_serializer(user, data=request.data, partial=False)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
         return Response(serializer.data)
 
     def patch(self, request: AuthenticatedRequest) -> Response:
         user = self.get_object()
-
-        if user.pk != request.user.pk:
-            return Response({"detail": "You can only delete your own account."}, status=status.HTTP_403_FORBIDDEN)
-
         serializer = self.get_serializer(user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
