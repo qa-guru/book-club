@@ -42,7 +42,7 @@ async function handleSubmit() {
             />
           </div>
           <div class="form-group" data-testid="password-form-group">
-            <label for="password" data-testid="password-label">Надежный пароль*</label>
+            <label for="password" data-testid="password-label">Пароль*</label>
             <input
               v-model="password"
               type="password"
