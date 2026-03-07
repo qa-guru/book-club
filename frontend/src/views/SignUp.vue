@@ -8,9 +8,20 @@ const router = useRouter()
 
 const username = ref('')
 const password = ref('')
+const confirmPassword = ref('')
 const error = ref('')
+const passwordMismatch = ref(false)
 
 async function handleSubmit() {
+  error.value = ''
+  passwordMismatch.value = false
+
+  if (password.value !== confirmPassword.value) {
+    passwordMismatch.value = true
+    error.value = 'Пароли не совпадают'
+    return
+  }
+
   try {
     await authStore.register(username.value, password.value)
     await authStore.login(username.value, password.value)
@@ -38,7 +49,7 @@ async function handleSubmit() {
               type="text"
               id="username"
               required
-              placeholder="username"
+              placeholder="Введите логин"
               data-testid="username-input"
             />
           </div>
@@ -49,9 +60,25 @@ async function handleSubmit() {
               type="password"
               id="password"
               required
-              placeholder="password"
+              placeholder="Введите пароль"
               data-testid="password-input"
             />
+          </div>
+          <div class="form-group" data-testid="confirm-password-form-group">
+            <label for="confirm-password" data-testid="confirm-password-label">Повтор пароля*</label>
+            <input
+              v-model="confirmPassword"
+              type="password"
+              id="confirm-password"
+              required
+              placeholder="повторите пароль"
+              :aria-invalid="passwordMismatch"
+              data-testid="confirm-password-input"
+              @input="passwordMismatch = false"
+            />
+            <p v-if="passwordMismatch" class="field-error" data-testid="password-mismatch-error">
+              Пароли не совпадают
+            </p>
           </div>
           <button type="submit" class="submit-btn" data-testid="signup-button">
             Зарегистрироваться
@@ -166,6 +193,17 @@ async function handleSubmit() {
   margin-top: var(--space-4);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
+}
+
+.field-error {
+  color: var(--color-error);
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.form-group input[aria-invalid="true"] {
+  border-color: var(--color-error);
 }
 
 @media (max-width: 480px) {
