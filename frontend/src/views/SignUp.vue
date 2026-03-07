@@ -70,7 +70,7 @@ async function handleSubmit() {
               type="password"
               id="confirm-password"
               required
-              placeholder="повторите пароль"
+              placeholder="Повторите пароль"
               :aria-invalid="passwordMismatch"
               data-testid="confirm-password-input"
               @input="passwordMismatch = false"

@@ -13,10 +13,10 @@
   --color-text-muted: rgba(245, 240, 232, 0.75);
   --color-text-muted-strong: rgba(245, 240, 232, 0.55);
 
-  --color-primary: #b85233;
-  --color-primary-hover: #9e4329;
-  --color-primary-active: #8a3a23;
-  --color-primary-rgb: 184, 82, 51;
+  --color-primary: #20AEE3;
+  --color-primary-hover: #1a96c7;
+  --color-primary-active: #157a9e;
+  --color-primary-rgb: 32, 174, 227;
 
   --color-error: #c45c4c;
   --color-error-hover: #a84d3f;
@@ -28,7 +28,7 @@
   --color-input-placeholder: #8a8580;
   --color-input-border: rgba(44, 42, 38, 0.15);
 
-  --color-blob: rgba(184, 82, 51, 0.12);
+  --color-blob: rgba(32, 174, 227, 0.12);
   --color-blob-alt: rgba(45, 90, 74, 0.08);
 
   --color-white: #ffffff;
@@ -87,7 +87,7 @@
   --duration-slow: 0.35s;
 
   /* Legacy aliases (для совместимости) */
-  --color-primary-soft: rgba(184, 82, 51, 0.15);
+  --color-primary-soft: rgba(32, 174, 227, 0.15);
 }
 
 /* ——— Base ——— */
