@@ -1,15 +1,15 @@
 import { Fixtures } from '@playwright/test';
-import { PlaywrightHomePage } from '../pages/playwright-home-page';
+import { HomePage } from '../pages/home-page';
 import { ContextPagesFixture } from './context-pages';
 
 export type PlaywrightPagesFixture = {
-  playwrightHomePage: PlaywrightHomePage;
+  homePage: HomePage;
 };
 
 export const playwrightPagesFixture: Fixtures<PlaywrightPagesFixture, ContextPagesFixture> = {
-  playwrightHomePage: async ({ contextPage }, use) => {
-    const playwrightHomePage = new PlaywrightHomePage(contextPage);
+  homePage: async ({ contextPage }, use) => {
+    const homePage = new HomePage(contextPage);
 
-    await use(playwrightHomePage);
+    await use(homePage);
   },
 };
