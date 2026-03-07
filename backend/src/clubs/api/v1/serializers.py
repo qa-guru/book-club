@@ -30,7 +30,7 @@ class BookReviewSerializer(serializers.ModelSerializer):
 
 class ClubSerializer(serializers.ModelSerializer):
     reviews = BookReviewSerializer(many=True, read_only=True)
-    owner = OwnerSerializer(read_only=True)
+    owner = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Club
