@@ -1,9 +1,12 @@
 ---
+# Docker Compose for local development
+# For production deployment, use the Helm chart in ./helm/book-club
+
 x-default-build-args: &default-build-args
   PYTHON_VERSION: "3.12"
 
 x-default-environment: &default-environment
-  BASE_URL: http://bookclub.qa.guru
+  BASE_URL: http://localhost
   DATABASE_URL: postgres://postgres@postgres:5432/postgres
 
 services:
@@ -14,23 +17,11 @@ services:
     ports:
       - "8100:80"
     networks:
-     - bookclub
+      - bookclub
     depends_on:
       - backend
 
-  postgres:
-    image: postgres:16-alpine
-    container_name: db
-    # Port not published to host — backend uses internal network (postgres:5432).
-    # Avoids "port 5432 already allocated" in CI and when host PostgreSQL is running.
-    environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
-    networks:
-     - bookclub
-    command: --autovacuum=off --fsync=off --synchronous_commit=off --full_page_writes=off --work_mem=12MB --max-connections=10 --max_wal_senders=0
-
   backend:
-    container_name: back
     build:
       context: ./backend
       target: web
@@ -39,8 +30,39 @@ services:
     ports:
       - "8000:8000"
     networks:
-     - bookclub
-    depends_on: [postgres]
+      - bookclub
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+    networks:
+      - bookclub
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    command: >
+      postgres
+      -c autovacuum=off
+      -c fsync=off
+      -c synchronous_commit=off
+      -c full_page_writes=off
+      -c work_mem=12MB
+      -c max_connections=10
+      -c max_wal_senders=0
 
 networks:
   bookclub:
+    driver: bridge
+
+volumes:
+  postgres-data:
