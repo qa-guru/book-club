@@ -36,5 +36,11 @@ jobs:
         run: |
           task install-dev-deps
         shell: bash
-      - run: docker compose up -d
+      - name: Start services
+        run: docker compose up -d
+        working-directory: .
+      - name: Wait for Postgres
+        run: |
+          until docker compose exec -T postgres pg_isready -U postgres; do sleep 2; done
+        working-directory: .
       - run: uv run pytest --create-db --reuse-db --exitfirst --alluredir=allure-results
