@@ -21,8 +21,8 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: db
-    ports:
-      - "5432:5432"
+    # Port not published to host — backend uses internal network (postgres:5432).
+    # Avoids "port 5432 already allocated" in CI and when host PostgreSQL is running.
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     networks:
