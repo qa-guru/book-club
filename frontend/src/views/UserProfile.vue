@@ -214,23 +214,24 @@ const updateProfile = async () => {
   width: 100%;
   max-width: 540px;
   margin: 0 auto;
-  padding: 1rem 1rem;
+  padding: var(--space-4);
   box-sizing: border-box;
-  color: var(--color-white);
+  color: var(--color-text-inverse);
 }
 
 .profile-info {
-  background: var(--color-black);
-  border-radius: 50px;
-  padding: 2.5rem;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-10);
   box-sizing: border-box;
+  box-shadow: var(--shadow-md);
 }
 
 /* Режим просмотра */
 .profile-view {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--space-8);
 }
 
 .avatar-container {
@@ -246,34 +247,35 @@ const updateProfile = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: var(--font-heading);
   font-size: 3rem;
-  font-weight: 500;
-  color: var(--color-white);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-inverse);
   text-transform: uppercase;
 }
 
 .info-grid {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .info-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid rgba(245, 240, 232, 0.12);
 }
 
 .info-item .label {
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   color: var(--color-primary);
-  font-size: 1rem;
+  font-size: var(--text-base);
 }
 
 .info-item .value {
-  font-size: 1rem;
+  font-size: var(--text-base);
   word-break: break-word;
   text-align: right;
 }
@@ -281,51 +283,63 @@ const updateProfile = async () => {
 .empty-state {
   width: 100%;
   text-align: center;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--color-text-muted);
   font-style: italic;
 }
 
 .action-buttons {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
 }
 
 .edit-btn {
   width: 100%;
-  height: 50px;
+  min-height: 48px;
   background: var(--color-primary);
-  border-radius: 30px;
+  border-radius: var(--radius-pill);
   border: none;
-  color: var(--color-white);
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  font-weight: 500;
+  color: var(--color-text-inverse);
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-base), 3vw, var(--text-lg));
+  font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
 .edit-btn:hover {
-  opacity: 0.9;
+  background: var(--color-primary-hover);
   transform: translateY(-2px);
+}
+
+.edit-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .logout-btn {
   width: 100%;
-  height: 50px;
+  min-height: 48px;
   background: var(--color-error);
-  border-radius: 30px;
+  border-radius: var(--radius-pill);
   border: none;
-  color: var(--color-white);
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  font-weight: 500;
+  color: var(--color-text-inverse);
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-base), 3vw, var(--text-lg));
+  font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
 .logout-btn:hover {
-  opacity: 0.9;
+  background: var(--color-error-hover);
   transform: translateY(-2px);
+}
+
+.logout-btn:focus-visible {
+  outline: 2px solid var(--color-error);
+  outline-offset: 2px;
 }
 
 /* Режим редактирования */
@@ -334,122 +348,141 @@ const updateProfile = async () => {
 }
 
 .edit-title {
-  font-size: clamp(1.25rem, 4vw, 1.5rem);
-  margin-bottom: 2rem;
+  font-family: var(--font-heading);
+  font-size: clamp(var(--text-xl), 4vw, var(--text-2xl));
+  margin-bottom: var(--space-8);
   text-align: center;
-  font-weight: 500;
-  color: var(--color-white);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-inverse);
 }
 
 .edit-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-6);
 }
 
 .form-group {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-2);
 }
 
 .form-group label {
   display: block;
-  font-size: clamp(0.875rem, 3vw, 1rem);
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  color: var(--color-white);
+  font-size: clamp(var(--text-sm), 3vw, var(--text-base));
+  font-weight: var(--weight-medium);
+  margin-bottom: var(--space-2);
+  color: var(--color-text-inverse);
 }
 
 .form-group input {
   width: 100%;
-  height: 50px;
-  background: var(--color-white);
-  border-radius: 30px;
-  border: none;
-  padding: 0 1.5rem;
-  font-size: clamp(0.875rem, 3vw, 1rem);
+  min-height: 48px;
+  background: var(--color-input-bg);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-input-border);
+  padding: 0 var(--space-6);
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-sm), 3vw, var(--text-base));
   color: var(--color-input-text);
-  font-style: italic;
   box-sizing: border-box;
+  transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .form-group input::placeholder {
-  color: var(--color-input-text);
-  font-style: italic;
-  opacity: 1;
+  color: var(--color-input-placeholder);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
 }
 
 .form-actions {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
 }
 
 .save-btn {
   width: 100%;
-  height: 50px;
+  min-height: 48px;
   background: var(--color-primary);
-  border-radius: 30px;
+  border-radius: var(--radius-pill);
   border: none;
-  color: var(--color-white);
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  font-weight: 500;
+  color: var(--color-text-inverse);
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-base), 3vw, var(--text-lg));
+  font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
 .save-btn:hover:not(:disabled) {
-  opacity: 0.9;
+  background: var(--color-primary-hover);
   transform: translateY(-2px);
 }
 
+.save-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .save-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
 .cancel-btn {
   width: 100%;
-  height: 50px;
+  min-height: 48px;
   background: transparent;
   border: 2px solid var(--color-primary);
-  border-radius: 30px;
+  border-radius: var(--radius-pill);
   color: var(--color-primary);
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  font-weight: 500;
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-base), 3vw, var(--text-lg));
+  font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color var(--duration-normal) var(--ease-out), color var(--duration-normal), transform var(--duration-fast) var(--ease-out);
 }
 
 .cancel-btn:hover:not(:disabled) {
   background: var(--color-primary);
-  color: var(--color-white);
+  color: var(--color-text-inverse);
   transform: translateY(-2px);
 }
 
+.cancel-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
 .cancel-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
 .error {
   color: var(--color-error);
   text-align: center;
-  font-size: clamp(0.875rem, 2vw, 1rem);
-  margin-top: 0.5rem;
+  font-size: var(--text-sm);
+  margin-top: var(--space-2);
+  font-weight: var(--weight-medium);
 }
 
 .success {
-  color: #4caf50;
+  color: var(--color-success);
   text-align: center;
-  font-size: clamp(0.875rem, 2vw, 1rem);
-  margin-top: 0.5rem;
+  font-size: var(--text-sm);
+  margin-top: var(--space-2);
 }
 
 @media (max-width: 768px) {
   .profile-info {
-    padding: 1.5rem;
-    border-radius: 30px;
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
   }
 
   .avatar {
@@ -461,7 +494,7 @@ const updateProfile = async () => {
   .info-item {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.25rem;
+    gap: var(--space-1);
   }
 
   .info-item .value {
@@ -471,11 +504,11 @@ const updateProfile = async () => {
 
 @media (max-width: 480px) {
   .page {
-    padding: 1rem;
+    padding: var(--space-4);
   }
 
   .profile-info {
-    padding: 1.25rem;
+    padding: var(--space-5);
   }
 
   .avatar {
@@ -488,8 +521,8 @@ const updateProfile = async () => {
   .logout-btn,
   .save-btn,
   .cancel-btn {
-    height: 45px;
-    font-size: 1rem;
+    min-height: 44px;
+    font-size: var(--text-base);
   }
 }
 

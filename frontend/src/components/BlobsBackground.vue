@@ -54,7 +54,7 @@ onMounted(() => {
 
 .blob {
   position: absolute;
-  background-color: var(--color-blob);
+  background: radial-gradient(ellipse at center, var(--color-blob) 0%, var(--color-blob-alt) 100%);
   border-radius: 50%;
   animation: float ease-in-out infinite;
 }

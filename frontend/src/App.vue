@@ -30,7 +30,7 @@ main {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 1rem;
+  padding: var(--space-4);
   box-sizing: border-box;
 }
 </style>

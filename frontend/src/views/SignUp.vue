@@ -69,96 +69,110 @@ async function handleSubmit() {
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 2rem 1rem;
+  padding: var(--space-8) var(--space-4);
   box-sizing: border-box;
 }
 
 .login-container {
   width: 100%;
-  max-width: 540px;
-  background: var(--color-black);
-  border-radius: 50px;
-  padding: 2.5rem;
+  max-width: 480px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-10);
   box-sizing: border-box;
-  margin-top: 1rem;
+  margin-top: var(--space-4);
+  box-shadow: var(--shadow-md);
 }
 
 .login-form {
   width: 100%;
-  color: var(--color-white);
+  color: var(--color-text-inverse);
 }
 
 .login-form h2 {
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  margin-bottom: 2rem;
+  font-family: var(--font-heading);
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-3xl));
+  margin-bottom: var(--space-8);
   text-align: center;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-6);
 }
 
 .form-group label {
   display: block;
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  font-weight: 500;
-  margin-bottom: 0.5rem;
+  font-size: clamp(var(--text-base), 3vw, var(--text-lg));
+  font-weight: var(--weight-medium);
+  margin-bottom: var(--space-2);
+  color: var(--color-text-inverse);
 }
 
 .form-group input {
   width: 100%;
-  height: 50px;
-  background: var(--color-white);
-  border-radius: 30px;
-  border: none;
-  padding: 0 1.5rem;
-  font-size: clamp(0.875rem, 3vw, 1.125rem);
+  min-height: 48px;
+  background: var(--color-input-bg);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-input-border);
+  padding: 0 var(--space-6);
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-sm), 3vw, var(--text-base));
   color: var(--color-input-text);
-  font-style: italic;
   box-sizing: border-box;
+  transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .form-group input::placeholder {
-  color: var(--color-input-text);
-  font-style: italic;
-  opacity: 1;
+  color: var(--color-input-placeholder);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
 }
 
 .submit-btn {
   width: 100%;
-  max-width: 257px;
-  height: 50px;
+  max-width: 260px;
+  min-height: 48px;
   background: var(--color-primary);
-  border-radius: 30px;
+  border-radius: var(--radius-pill);
   border: none;
-  color: var(--color-white);
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  font-weight: 500;
+  color: var(--color-text-inverse);
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-base), 3vw, var(--text-lg));
+  font-weight: var(--weight-medium);
   display: block;
-  margin: 2rem auto 0;
+  margin: var(--space-8) auto 0;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
 .submit-btn:hover {
-  opacity: 0.9;
+  background: var(--color-primary-hover);
   transform: translateY(-2px);
+}
+
+.submit-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .error {
   color: var(--color-error);
   text-align: center;
-  margin-top: 1rem;
-  font-size: clamp(0.875rem, 2vw, 1rem);
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
 }
 
 @media (max-width: 480px) {
   .login-container {
-    padding: 1.5rem;
-    border-radius: 30px;
-    width: calc(100vw - 1rem);
-    max-height: calc(100vh - 1rem);
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
+    width: calc(100vw - var(--space-4));
   }
 
   .submit-btn {
@@ -168,7 +182,7 @@ async function handleSubmit() {
 
 @supports (-webkit-touch-callout: none) {
   .login-page {
-    height: -webkit-fill-available;
+    min-height: -webkit-fill-available;
   }
 }
 </style>

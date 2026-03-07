@@ -109,49 +109,57 @@ const selectOption = (size: number) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background: var(--color-black);
-  border-radius: 50px;
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  box-shadow: var(--shadow-sm);
 }
 
 .pagination-buttons {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--space-3);
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 }
 
 .pagination-button {
-  padding: 0.75rem 1.25rem;
+  padding: var(--space-3) var(--space-5);
   border: none;
-  background-color: var(--color-white);
-  border-radius: 30px;
+  background-color: var(--color-input-bg);
+  border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  font-weight: 500;
-  color: var(--color-black);
+  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast);
+  font-family: var(--font-body);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
   min-width: 44px;
+  min-height: 44px;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .pagination-button:hover:not(:disabled):not(.active) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  background-color: #f0f0f0;
+  box-shadow: var(--shadow-md);
+  background-color: rgba(245, 240, 232, 0.95);
+}
+
+.pagination-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .pagination-button.active {
   background-color: var(--color-primary);
-  color: white;
-  box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
-  transform: scale(1.05);
+  color: var(--color-text-inverse);
+  box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.35);
+  transform: scale(1.02);
   cursor: default;
 }
 
@@ -162,25 +170,25 @@ const selectOption = (size: number) => {
 }
 
 .ellipsis {
-  padding: 0.75rem 0.5rem;
+  padding: var(--space-3) var(--space-2);
   display: inline-block;
-  color: var(--color-white);
-  font-size: 1.2rem;
+  color: var(--color-text-inverse);
+  font-size: var(--text-lg);
 }
 
 .page-size-selector {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  color: var(--color-white);
+  gap: var(--space-4);
+  color: var(--color-text-inverse);
   width: 100%;
   max-width: 300px;
 }
 
 .page-size-selector label {
-  font-weight: 500;
-  font-size: 1rem;
+  font-weight: var(--weight-medium);
+  font-size: var(--text-base);
   white-space: nowrap;
 }
 
@@ -190,22 +198,27 @@ const selectOption = (size: number) => {
 }
 
 .select-header {
-  padding: 0.75rem 1.25rem;
-  border-radius: 30px;
-  background-color: var(--color-white);
-  color: var(--color-black);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-input-bg);
+  color: var(--color-text);
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  font-style: italic;
+  transition: box-shadow var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-body);
 }
 
 .select-header:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
   transform: translateY(-1px);
+}
+
+.select-header:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .select-header:after {
@@ -216,7 +229,7 @@ const selectOption = (size: number) => {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center;
-  transition: transform 0.2s ease;
+  transition: transform var(--duration-fast) var(--ease-out);
 }
 
 .select-options {
@@ -224,16 +237,16 @@ const selectOption = (size: number) => {
   top: 100%;
   left: 0;
   right: 0;
-  background: var(--color-white);
-  border-radius: 15px;
-  margin-top: 5px;
+  background: var(--color-input-bg);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-2);
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lg);
   z-index: 100;
   max-height: 0;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: max-height var(--duration-normal) var(--ease-out), opacity var(--duration-normal), visibility var(--duration-normal);
 }
 
 .custom-select.open .select-options {
@@ -247,21 +260,22 @@ const selectOption = (size: number) => {
 }
 
 .select-option {
-  padding: 0.75rem 1.25rem;
+  padding: var(--space-3) var(--space-5);
   cursor: pointer;
-  transition: all 0.2s ease;
-  color: var(--color-black);
+  transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast);
+  color: var(--color-text);
   display: flex;
   align-items: center;
+  font-family: var(--font-body);
 }
 
 .select-option:hover:not(.not-selectable) {
   background-color: var(--color-primary);
-  color: white;
+  color: var(--color-text-inverse);
 }
 
 .select-option.selected {
-  background-color: rgba(var(--color-primary-rgb), 0.2);
+  background-color: var(--color-primary-soft);
   cursor: default;
 }
 
@@ -272,7 +286,7 @@ const selectOption = (size: number) => {
 
 .select-option.not-selectable:hover {
   background-color: transparent;
-  color: var(--color-black);
+  color: var(--color-text);
 }
 
 @keyframes pulse {
@@ -299,7 +313,7 @@ const selectOption = (size: number) => {
 }
 
 .pagination-button.active {
-  animation: pulse 1.5s infinite;
+  animation: none;
 }
 
 .select-option {
@@ -324,23 +338,23 @@ const selectOption = (size: number) => {
 
 @media (max-width: 600px) {
   .pagination-controls {
-    padding: 1.25rem;
-    border-radius: 30px;
+    padding: var(--space-5);
+    border-radius: var(--radius-md);
   }
 
   .pagination-buttons {
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
   .pagination-button {
-    padding: 0.6rem 1rem;
-    min-width: 36px;
+    padding: var(--space-2) var(--space-4);
+    min-width: 40px;
   }
 
   .page-size-selector {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.75rem;
+    gap: var(--space-3);
   }
 
   .page-size-selector label {
@@ -348,11 +362,11 @@ const selectOption = (size: number) => {
   }
 
   .select-header {
-    padding: 0.65rem 1.15rem;
+    padding: var(--space-2) var(--space-4);
   }
 
   .select-option {
-    padding: 0.65rem 1.15rem;
+    padding: var(--space-2) var(--space-4);
   }
 }
 

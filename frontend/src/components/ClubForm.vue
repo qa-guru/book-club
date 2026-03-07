@@ -148,7 +148,7 @@ const onSubmit = handleSubmit(async (values) => {
       </div>
 
       <div class="form-actions">
-        <button type="submit" :disabled="isLoading" class="submit-btn">
+        <button type="submit" :disabled="isLoading" class="submit-btn" :class="{ 'btn-loading': isLoading }">
           {{ isLoading ? 'Сохранение...' : clubId ? 'Сохранить изменения' : 'Создать клуб' }}
         </button>
         <button type="button" @click="router.push('/')" :disabled="isLoading" class="cancel-btn">
@@ -163,44 +163,47 @@ const onSubmit = handleSubmit(async (values) => {
 .club-form {
   width: 100%;
   max-width: 540px;
-  padding: 1rem 1rem;
+  padding: var(--space-4);
   margin: 0 auto;
   box-sizing: border-box;
 }
 
 form {
-  background: var(--color-black);
-  border-radius: 50px;
-  padding: 2.5rem;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-10);
   box-sizing: border-box;
+  box-shadow: var(--shadow-md);
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-6);
 }
 
 .form-group label {
   display: block;
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  color: var(--color-white);
+  font-size: clamp(var(--text-base), 3vw, var(--text-lg));
+  font-weight: var(--weight-medium);
+  margin-bottom: var(--space-2);
+  color: var(--color-text-inverse);
 }
 
 .form-input,
 .form-textarea {
   width: 100%;
-  background: var(--color-white);
-  border-radius: 30px;
-  border: none;
-  padding: 1rem 1.5rem;
-  font-size: clamp(0.875rem, 3vw, 1.125rem);
+  background: var(--color-input-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-input-border);
+  padding: var(--space-4) var(--space-6);
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-sm), 3vw, var(--text-base));
   color: var(--color-input-text);
   box-sizing: border-box;
+  transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .form-input {
-  height: 50px;
+  min-height: 48px;
 }
 
 .form-textarea {
@@ -210,51 +213,78 @@ form {
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-  color: var(--color-input-text);
-  opacity: 1;
-  font-style: italic;
+  color: var(--color-input-placeholder);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.form-input:disabled,
+.form-textarea:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .error {
   color: var(--color-error);
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
+  font-size: var(--text-sm);
+  margin-top: var(--space-2);
   display: block;
+  font-weight: var(--weight-medium);
 }
 
 .form-actions {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
 }
 
 .submit-btn,
 .cancel-btn {
-  height: 50px;
-  border-radius: 30px;
+  min-height: 48px;
+  border-radius: var(--radius-pill);
   border: none;
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  font-weight: 500;
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-base), 3vw, var(--text-lg));
+  font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0 2rem;
+  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  padding: 0 var(--space-8);
 }
 
 .submit-btn {
   background: var(--color-primary);
-  color: var(--color-white);
+  color: var(--color-text-inverse);
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
+}
+
+.submit-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .cancel-btn {
-  background: var(--color-white);
-  color: var(--color-black);
+  background: var(--color-input-bg);
+  color: var(--color-text);
 }
 
-.submit-btn:hover,
-.cancel-btn:hover {
-  opacity: 0.9;
+.cancel-btn:hover:not(:disabled) {
+  background: rgba(245, 240, 232, 0.9);
   transform: translateY(-2px);
+}
+
+.cancel-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .submit-btn:disabled,
@@ -266,17 +296,17 @@ form {
 
 @media (max-width: 768px) {
   .club-form {
-    padding: 1rem;
+    padding: var(--space-4);
   }
 
   form {
-    padding: 1.5rem;
-    border-radius: 30px;
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
   }
 
   .form-actions {
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--space-3);
   }
 
   .submit-btn,
@@ -287,16 +317,16 @@ form {
 
 @media (max-width: 480px) {
   form {
-    padding: 1.25rem;
+    padding: var(--space-5);
   }
 
   .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-4);
   }
 
   .form-input {
-    height: 45px;
-    padding: 0 1rem;
+    min-height: 44px;
+    padding: 0 var(--space-4);
   }
 
   .form-textarea {

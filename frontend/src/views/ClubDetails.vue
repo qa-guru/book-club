@@ -121,112 +121,126 @@ onMounted(() => {
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  padding: 1rem 1rem;
+  padding: var(--space-4);
   box-sizing: border-box;
 }
 
-.loading,
-.error {
+.loading {
   text-align: center;
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  padding: 2rem;
-  color: var(--color-white);
+  font-size: var(--text-lg);
+  padding: var(--space-8);
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
 }
 
 .error {
+  text-align: center;
+  font-size: var(--text-lg);
+  padding: var(--space-8);
   color: var(--color-error);
+  font-weight: var(--weight-medium);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
 }
 
 .club-content {
-  background: var(--color-black);
-  border-radius: 50px;
-  padding: 2.5rem;
-  color: var(--color-white);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-10);
+  color: var(--color-text-inverse);
+  box-shadow: var(--shadow-md);
 }
 
 .club-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: var(--space-6);
   flex-wrap: wrap;
+  gap: var(--space-3);
 }
 
 .club-header h1 {
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-family: var(--font-heading);
+  font-size: clamp(var(--text-2xl), 4vw, var(--text-3xl));
   margin: 0;
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   flex: 1;
   min-width: 60%;
+  line-height: var(--leading-tight);
 }
 
 .year {
   background: var(--color-primary);
-  border-radius: 20px;
-  padding: 0.5rem 1rem;
-  font-size: clamp(0.875rem, 2vw, 1rem);
-  margin-left: 1rem;
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  font-size: clamp(var(--text-sm), 2vw, var(--text-base));
+  font-weight: var(--weight-medium);
+  flex-shrink: 0;
 }
 
 .authors {
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  color: var(--color-text-secondary);
-  margin-bottom: 1.5rem;
+  font-size: clamp(var(--text-base), 2.5vw, var(--text-lg));
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-6);
   font-style: italic;
 }
 
 .description {
-  font-size: clamp(1rem, 2.5vw, 1.125rem);
-  line-height: 1.6;
-  margin-bottom: 2.5rem;
+  font-size: clamp(var(--text-base), 2.5vw, var(--text-lg));
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-10);
   white-space: pre-line;
 }
 
 .club-stats {
   display: flex;
-  gap: 2rem;
-  margin: 2rem 0;
-  padding: 1.5rem 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: var(--space-8);
+  margin: var(--space-8) 0;
+  padding: var(--space-6) 0;
+  border-top: 1px solid rgba(245, 240, 232, 0.12);
+  border-bottom: 1px solid rgba(245, 240, 232, 0.12);
 }
 
 .stat-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .stat-label {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 1rem;
+  color: var(--color-text-muted);
+  font-size: var(--text-base);
 }
 
 .stat-value {
-  font-size: 1.25rem;
-  font-weight: 500;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
   color: var(--color-primary);
 }
 
 .club-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
 }
 
 .telegram-btn,
 .join-btn,
 .leave-btn,
 .edit-btn {
-  height: 50px;
-  border-radius: 30px;
+  min-height: 48px;
+  border-radius: var(--radius-pill);
   border: none;
-  font-size: clamp(1rem, 2vw, 1.125rem);
-  font-weight: 500;
+  font-family: var(--font-body);
+  font-size: clamp(var(--text-base), 2vw, var(--text-lg));
+  font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0 1.5rem;
+  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  padding: 0 var(--space-6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -240,36 +254,56 @@ onMounted(() => {
 
 .telegram-btn {
   background: #0088cc;
-  color: white;
+  color: var(--color-text-inverse);
+}
+
+.telegram-btn:hover {
+  background: #0077b5;
+  transform: translateY(-2px);
 }
 
 .join-btn {
   background: var(--color-primary);
-  color: var(--color-white);
+  color: var(--color-text-inverse);
+}
+
+.join-btn:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
 }
 
 .leave-btn {
   background: var(--color-error);
-  color: var(--color-white);
+  color: var(--color-text-inverse);
+}
+
+.leave-btn:hover {
+  background: var(--color-error-hover);
+  transform: translateY(-2px);
 }
 
 .edit-btn {
-  background: var(--color-white);
-  color: var(--color-black);
+  background: var(--color-input-bg);
+  color: var(--color-text);
 }
 
-.telegram-btn:hover,
-.join-btn:hover,
-.leave-btn:hover,
 .edit-btn:hover {
-  opacity: 0.9;
+  background: rgba(245, 240, 232, 0.95);
   transform: translateY(-2px);
+}
+
+.telegram-btn:focus-visible,
+.join-btn:focus-visible,
+.leave-btn:focus-visible,
+.edit-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 @media (max-width: 768px) {
   .club-content {
-    padding: 1.5rem;
-    border-radius: 30px;
+    padding: var(--space-6);
+    border-radius: var(--radius-md);
   }
 
   .club-header {
@@ -278,13 +312,12 @@ onMounted(() => {
   }
 
   .year {
-    margin-left: 0;
-    margin-top: 0.75rem;
+    margin-top: var(--space-3);
   }
 
   .club-stats {
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--space-4);
   }
 
   .club-actions {
@@ -304,19 +337,19 @@ onMounted(() => {
 
 @media (max-width: 480px) {
   .club-details {
-    padding: 1rem;
+    padding: var(--space-4);
   }
 
   .club-content {
-    padding: 1.25rem;
+    padding: var(--space-5);
   }
 
   .telegram-btn,
   .join-btn,
   .leave-btn,
   .edit-btn {
-    height: 45px;
-    padding: 0 1rem;
+    min-height: 44px;
+    padding: 0 var(--space-4);
   }
 }
 </style>

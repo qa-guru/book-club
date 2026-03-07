@@ -71,12 +71,12 @@ const closeMenu = () => {
 
 <style scoped>
 .header {
-  background-color: var(--color-black);
+  background-color: var(--color-surface);
   position: sticky;
   top: 0;
   z-index: 100;
-  padding: 0.5rem 1rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: var(--space-2) var(--space-4);
+  box-shadow: var(--shadow-md);
 }
 
 .header-content {
@@ -87,36 +87,43 @@ const closeMenu = () => {
   margin: 0 auto;
   width: 100%;
   position: relative;
-  height: 40px;
+  min-height: 48px;
 }
 
 .logo {
-  font-weight: 700;
-  font-size: clamp(1.25rem, 3vw, 1.5rem);
-  color: var(--color-white);
+  font-family: var(--font-heading);
+  font-weight: var(--weight-semibold);
+  font-size: clamp(var(--text-xl), 3vw, var(--text-2xl));
+  color: var(--color-text-inverse);
   text-decoration: none;
-  transition: opacity 0.3s;
+  transition: color var(--duration-normal) var(--ease-out);
   z-index: 102;
 }
 
 .logo:hover {
-  opacity: 0.8;
+  color: var(--color-primary);
+}
+
+.logo:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
 }
 
 .nav {
   display: flex;
-  gap: clamp(0.75rem, 2vw, 1.5rem);
+  gap: var(--space-6);
 }
 
 .nav-link {
   position: relative;
   text-decoration: none;
-  color: var(--color-white);
-  font-weight: 500;
-  font-size: clamp(0.875rem, 2vw, 1rem);
+  color: var(--color-text-inverse);
+  font-weight: var(--weight-medium);
+  font-size: clamp(var(--text-sm), 2vw, var(--text-base));
   white-space: nowrap;
-  transition: all 0.3s ease;
-  padding: 0.25rem 0;
+  transition: color var(--duration-normal) var(--ease-out);
+  padding: var(--space-2) 0;
 }
 
 .nav-link::after {
@@ -126,37 +133,58 @@ const closeMenu = () => {
   left: 0;
   width: 0;
   height: 2px;
-  background-color: var(--color-white);
-  transition: width 0.3s ease;
+  background-color: var(--color-primary);
+  transition: width var(--duration-normal) var(--ease-out);
+}
+
+.nav-link:hover {
+  color: var(--color-text-muted);
 }
 
 .nav-link:hover::after {
   width: 100%;
 }
 
+.nav-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
 .burger-menu {
   display: none;
   cursor: pointer;
-  width: 28px;
-  height: 28px;
+  width: 44px;
+  height: 44px;
   position: relative;
   z-index: 102;
   background: transparent;
   border: none;
-  padding: 0;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.burger-menu:hover {
+  background: rgba(245, 240, 232, 0.08);
+}
+
+.burger-menu:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 .burger-line {
   position: absolute;
-  width: 100%;
+  width: calc(100% - 16px);
   height: 2px;
-  background-color: var(--color-white);
-  left: 0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--color-text-inverse);
+  left: 8px;
+  transition: all var(--duration-normal) var(--ease-out);
 }
 
 .burger-line-1 {
-  top: 6px;
+  top: 14px;
   transform-origin: left center;
 }
 
@@ -167,7 +195,7 @@ const closeMenu = () => {
 }
 
 .burger-line-3 {
-  bottom: 6px;
+  bottom: 14px;
   transform-origin: left center;
 }
 
@@ -177,10 +205,10 @@ const closeMenu = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(44, 42, 38, 0.5);
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: opacity var(--duration-normal) var(--ease-out), visibility var(--duration-normal);
   z-index: 100;
 }
 
@@ -196,14 +224,14 @@ const closeMenu = () => {
     right: -100%;
     width: min(75%, 280px);
     height: 100vh;
-    background-color: var(--color-black);
+    background-color: var(--color-surface);
     flex-direction: column;
     align-items: flex-end;
-    padding: 80px 1rem 1.5rem;
-    gap: 0.75rem;
-    transition: right 0.3s ease;
+    padding: 80px var(--space-4) var(--space-6);
+    gap: var(--space-3);
+    transition: right var(--duration-normal) var(--ease-out);
     z-index: 101;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-lg);
   }
 
   .nav.active {
@@ -211,20 +239,22 @@ const closeMenu = () => {
   }
 
   .burger-menu {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .nav-link {
-    font-size: 1rem;
+    font-size: var(--text-base);
     width: auto;
-    padding: 0.35rem 0.5rem;
-    border-radius: 4px;
-    transition: background-color 0.2s;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+    transition: background-color var(--duration-fast) var(--ease-out);
     text-align: right;
   }
 
   .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(245, 240, 232, 0.1);
   }
 
   .nav-link::after {
