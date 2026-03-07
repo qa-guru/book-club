@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.3",
     "info": {
-        "title": "Our fancy API",
-        "version": "0.0.0 (v1)",
+        "title": "QA.GURU Book Club API",
+        "version": "0.0.1 (v1)",
         "description": "So great, needs no docs"
     },
     "paths": {

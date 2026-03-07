@@ -40,7 +40,7 @@ if env("DEBUG", cast=bool, default=False):
 
 # Set up drf_spectacular, https://drf-spectacular.readthedocs.io/en/latest/settings.html
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Our fancy API",
+    "TITLE": "QA.GURU Book Club API",
     "DESCRIPTION": "So great, needs no docs",
     "SWAGGER_UI_DIST": "SIDECAR",
     "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
