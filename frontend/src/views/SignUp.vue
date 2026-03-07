@@ -18,7 +18,6 @@ async function handleSubmit() {
 
   if (password.value !== confirmPassword.value) {
     passwordMismatch.value = true
-    error.value = 'Пароли не совпадают'
     return
   }
 
