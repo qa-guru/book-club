@@ -18,6 +18,18 @@ spec:
     scrapeTimeout: {{ .Values.monitoring.prometheus.scrapeTimeout }}
     headers:
       Host: localhost
+    # Add application label for Grafana dashboards
+    relabelings:
+    - sourceLabels: [__meta_kubernetes_pod_label_app_kubernetes_io_name]
+      targetLabel: application
+    - sourceLabels: [__meta_kubernetes_pod_label_app_kubernetes_io_component]
+      targetLabel: component
+    - sourceLabels: [__meta_kubernetes_namespace]
+      targetLabel: namespace
+    - sourceLabels: [__meta_kubernetes_pod_name]
+      targetLabel: pod
+    - sourceLabels: [__meta_kubernetes_pod_node_name]
+      targetLabel: node
 ---
 {{- if .Values.postgres.enabled }}
 apiVersion: monitoring.coreos.com/v1
