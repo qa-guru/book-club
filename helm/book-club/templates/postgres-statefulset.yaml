@@ -1,0 +1,45 @@
+{{- if .Values.postgres.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "book-club.fullname" . }}-postgres
+  labels:
+    {{- include "book-club.labels" . | nindent 4 }}
+    app.kubernetes.io/component: postgres
+spec:
+  serviceName: {{ include "book-club.fullname" . }}-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "book-club.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: postgres
+  template:
+    metadata:
+      labels:
+        {{- include "book-club.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: {{ .Values.postgres.image }}
+        ports:
+        - name: postgres
+          containerPort: {{ .Values.postgres.port }}
+          protocol: TCP
+        env:
+          {{- toYaml .Values.postgres.env | nindent 10 }}
+        volumeMounts:
+        - name: postgres-data
+          mountPath: /var/lib/postgresql/data
+        resources:
+          {{- toYaml .Values.postgres.resources | nindent 10 }}
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: {{ .Values.postgres.storageClassName }}
+      resources:
+        requests:
+          storage: {{ .Values.postgres.storage }}
+{{- end }}

@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "book-club.fullname" . }}-backend
+  labels:
+    {{- include "book-club.labels" . | nindent 4 }}
+    app.kubernetes.io/component: backend
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - port: {{ .Values.service.backend.port }}
+    targetPort: {{ .Values.service.backend.targetPort }}
+    protocol: TCP
+    name: http
+  selector:
+    {{- include "book-club.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: backend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "book-club.fullname" . }}-frontend
+  labels:
+    {{- include "book-club.labels" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - port: {{ .Values.service.frontend.port }}
+    targetPort: {{ .Values.service.frontend.targetPort }}
+    protocol: TCP
+    name: http
+  selector:
+    {{- include "book-club.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: frontend
+---
+{{- if .Values.postgres.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "book-club.fullname" . }}-postgres
+  labels:
+    {{- include "book-club.labels" . | nindent 4 }}
+    app.kubernetes.io/component: postgres
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - port: {{ .Values.service.postgres.port }}
+    targetPort: {{ .Values.service.postgres.targetPort }}
+    protocol: TCP
+    name: postgres
+  selector:
+    {{- include "book-club.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: postgres
+{{- end }}
