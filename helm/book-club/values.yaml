@@ -6,6 +6,29 @@ image:
   pullPolicy: IfNotPresent
   tag: latest
 
+# Observability configuration
+monitoring:
+  # Prometheus metrics
+  prometheus:
+    enabled: true
+    scrapeInterval: 30s
+    scrapeTimeout: 10s
+  
+  # Loki logging
+  loki:
+    enabled: true
+    # Logs are automatically collected via pod labels
+  
+  # Pyroscope continuous profiling
+  pyroscope:
+    enabled: true  # Enable in production for profiling
+    serverAddress: http://pyroscope.monitoring.svc.cluster.local:4040
+  
+  # Tempo distributed tracing
+  tempo:
+    enabled: true  # Enable when you have Tempo installed
+    endpoint: http://tempo.monitoring.svc.cluster.local:4317
+
 imagePullSecrets:
   - name: harbor-registry-secret
 
@@ -90,6 +113,9 @@ ingress:
           pathType: Prefix
           backend: backend
         - path: /admin
+          pathType: Prefix
+          backend: backend
+        - path: /static
           pathType: Prefix
           backend: backend
         - path: /

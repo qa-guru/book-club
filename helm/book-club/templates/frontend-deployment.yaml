@@ -16,6 +16,12 @@ spec:
       labels:
         {{- include "book-club.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: frontend
+      annotations:
+        {{- if .Values.monitoring.prometheus.enabled }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.frontend.port }}"
+        prometheus.io/path: "/metrics"
+        {{- end }}
     spec:
       imagePullSecrets:
         {{- toYaml .Values.imagePullSecrets | nindent 8 }}

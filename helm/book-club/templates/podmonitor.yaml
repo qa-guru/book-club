@@ -1,0 +1,16 @@
+{{- if .Values.monitoring.prometheus.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ include "book-club.fullname" . }}
+  labels:
+    {{- include "book-club.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "book-club.selectorLabels" . | nindent 6 }}
+  podMetricsEndpoints:
+  - port: http
+    path: /metrics
+    interval: {{ .Values.monitoring.prometheus.scrapeInterval }}
+{{- end }}

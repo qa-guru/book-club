@@ -8,6 +8,7 @@ api = [
 ]
 
 urlpatterns = [
+    path("", include("django_prometheus.urls")),  # Exposes /metrics endpoint
     path("admin/", admin.site.urls),
     path("api/", include(api)),
     path("", RedirectView.as_view(url="/api/v1/docs/swagger/", permanent=False)),

@@ -1,0 +1,38 @@
+{{- if .Values.monitoring.prometheus.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "book-club.fullname" . }}-backend
+  labels:
+    {{- include "book-club.labels" . | nindent 4 }}
+    app.kubernetes.io/component: backend
+spec:
+  selector:
+    matchLabels:
+      {{- include "book-club.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: backend
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: {{ .Values.monitoring.prometheus.scrapeInterval }}
+    scrapeTimeout: {{ .Values.monitoring.prometheus.scrapeTimeout }}
+---
+{{- if .Values.postgres.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "book-club.fullname" . }}-postgres
+  labels:
+    {{- include "book-club.labels" . | nindent 4 }}
+    app.kubernetes.io/component: postgres
+spec:
+  selector:
+    matchLabels:
+      {{- include "book-club.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: postgres
+  endpoints:
+  - port: metrics
+    interval: {{ .Values.monitoring.prometheus.scrapeInterval }}
+    scrapeTimeout: {{ .Values.monitoring.prometheus.scrapeTimeout }}
+{{- end }}
+{{- end }}

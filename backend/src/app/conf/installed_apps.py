@@ -8,6 +8,7 @@ APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    "django_prometheus",  # Must be first for middleware wrapping
     "drf_spectacular",
     "drf_spectacular_sidecar",
     "rest_framework",

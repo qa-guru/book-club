@@ -16,6 +16,22 @@ spec:
       labels:
         {{- include "book-club.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: backend
+      annotations:
+        {{- if .Values.monitoring.prometheus.enabled }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.backend.port }}"
+        prometheus.io/path: "/metrics"
+        {{- end }}
+        {{- if .Values.monitoring.pyroscope.enabled }}
+        pyroscope.io/scrape: "true"
+        pyroscope.io/application-name: "{{ include "book-club.fullname" . }}-backend"
+        pyroscope.io/profile-cpu-enabled: "true"
+        pyroscope.io/profile-mem-enabled: "true"
+        pyroscope.io/port: "{{ .Values.backend.port }}"
+        {{- end }}
+        {{- if .Values.monitoring.tempo.enabled }}
+        tempo.grafana.com/scrape: "true"
+        {{- end }}
     spec:
       imagePullSecrets:
         {{- toYaml .Values.imagePullSecrets | nindent 8 }}
@@ -47,5 +63,17 @@ spec:
           periodSeconds: 5
         env:
           {{- toYaml .Values.backend.env | nindent 10 }}
+          {{- if .Values.monitoring.tempo.enabled }}
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: "{{ .Values.monitoring.tempo.endpoint }}"
+          - name: OTEL_SERVICE_NAME
+            value: "{{ include "book-club.fullname" . }}-backend"
+          - name: OTEL_TRACES_EXPORTER
+            value: "otlp"
+          - name: OTEL_METRICS_EXPORTER
+            value: "none"
+          - name: OTEL_LOGS_EXPORTER
+            value: "none"
+          {{- end }}
         resources:
           {{- toYaml .Values.backend.resources | nindent 10 }}
