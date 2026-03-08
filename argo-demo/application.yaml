@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: book-club
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    # ArgoCD Image Updater configuration
+    argocd-image-updater.argoproj.io/image-list: |
+      backend=harbor.qa.guru/qa-guru-internal/backend:latest,
+      frontend=harbor.qa.guru/qa-guru-internal/frontend:latest
+    argocd-image-updater.argoproj.io/backend.update-strategy: latest
+    argocd-image-updater.argoproj.io/frontend.update-strategy: latest
+    argocd-image-updater.argoproj.io/write-back-method: argocd
+    argocd-image-updater.argoproj.io/backend.pull-secret: pullsecret:book-club/harbor-registry-secret
+    argocd-image-updater.argoproj.io/frontend.pull-secret: pullsecret:book-club/harbor-registry-secret
+spec:
+  project: default
+  
+  source:
+    # Pull Helm chart from Harbor OCI registry
+    chart: book-club
+    repoURL: oci://harbor.qa.guru/qa-guru-internal
+    targetRevision: 1.0.*  # Auto-update to latest 1.0.x version
+    
+    helm:
+      # Use production values
+      valueFiles:
+        - $values/argocd-deployment/values/production.yaml
+  
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: book-club
+  
+  syncPolicy:
+    automated:
+      prune: true        # Remove resources that are no longer defined
+      selfHeal: true     # Automatically sync when cluster state differs
+      allowEmpty: false  # Don't sync if no resources
+    
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+    
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  
+  # Ignore differences in these fields (managed by Image Updater)
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/template/spec/containers/0/image
+        - /spec/template/spec/containers/1/image

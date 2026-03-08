@@ -1,0 +1,148 @@
+# Production values for Book Club
+# This file overrides values from the Helm chart
+
+image:
+  registry: harbor.qa.guru
+  project: book-club
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: harbor-registry-secret
+
+backend:
+  replicaCount: 3
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+  
+  env:
+    - name: BASE_URL
+      value: "https://book-club.qa.guru"
+    - name: DATABASE_URL
+      valueFrom:
+        secretKeyRef:
+          name: book-club-secrets
+          key: database-url
+    - name: DJANGO_SETTINGS_MODULE
+      value: "app.settings"
+    - name: DJANGO_DEBUG
+      value: "False"
+
+frontend:
+  replicaCount: 3
+  
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+postgres:
+  enabled: true
+  storage: 5Gi
+  
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
+      cpu: 1000m
+      memory: 1Gi
+  
+  env:
+    - name: POSTGRES_DB
+      value: bookclub
+    - name: POSTGRES_USER
+      value: bookclub
+    - name: POSTGRES_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: book-club-secrets
+          key: postgres-password
+    # Production PostgreSQL settings
+    - name: POSTGRES_INITDB_ARGS
+      value: "--encoding=UTF8 --locale=en_US.UTF-8"
+
+service:
+  type: ClusterIP
+  backend:
+    port: 8000
+    targetPort: 8000
+  frontend:
+    port: 80
+    targetPort: 80
+  postgres:
+    port: 5432
+    targetPort: 5432
+
+ingress:
+  enabled: true
+  className: nginx
+  
+  annotations:
+    # Cert-manager for Let's Encrypt
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    
+    # External DNS configuration
+    external-dns.alpha.kubernetes.io/hostname: book-club.qa.guru
+    external-dns.alpha.kubernetes.io/target: reflector.qa.guru
+    external-dns.alpha.kubernetes.io/ttl: "60"
+    
+    # Nginx ingress optimizations
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  
+  hosts:
+    - host: book-club.qa.guru
+      paths:
+        - path: /api
+          pathType: Prefix
+          backend: backend
+        - path: /
+          pathType: Prefix
+          backend: frontend
+  
+  tls:
+    - secretName: bookclub-tls
+      hosts:
+        - book-club.qa.guru
+
+vault:
+  enabled: true
+  address: https://vault.qa.guru
+  role: book-club-prod
+  secretPath: secret/data/book-club/production
+
+# Pod disruption budgets for high availability
+podDisruptionBudget:
+  backend:
+    enabled: true
+    minAvailable: 2
+  frontend:
+    enabled: true
+    minAvailable: 2
+
+# Horizontal Pod Autoscaling
+autoscaling:
+  backend:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+  
+  frontend:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
