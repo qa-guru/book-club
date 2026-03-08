@@ -88,7 +88,7 @@ const closeMenu = () => {
             </svg>
           </a>
           <a
-            href="http://bookclub.qa.guru:8000/api/v1/docs/swagger/"
+            href="https://book-club.qa.guru/api/v1/docs/swagger/"
             target="_blank"
             rel="noopener noreferrer"
             class="nav-icon"
