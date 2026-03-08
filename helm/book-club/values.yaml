@@ -89,6 +89,9 @@ ingress:
         - path: /api
           pathType: Prefix
           backend: backend
+        - path: /admin
+          pathType: Prefix
+          backend: backend
         - path: /
           pathType: Prefix
           backend: frontend
