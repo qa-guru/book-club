@@ -26,6 +26,7 @@ include(
     "conf/installed_apps.py",
     "conf/media.py",
     "conf/middleware.py",
+    "conf/observability.py",  # Pyroscope and Tempo
     "conf/storage.py",
     "conf/sentry.py",
     "conf/static.py",

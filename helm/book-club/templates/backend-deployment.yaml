@@ -63,6 +63,14 @@ spec:
           periodSeconds: 5
         env:
           {{- toYaml .Values.backend.env | nindent 10 }}
+          {{- if .Values.monitoring.pyroscope.enabled }}
+          - name: PYROSCOPE_ENABLED
+            value: "true"
+          - name: PYROSCOPE_SERVER_ADDRESS
+            value: "{{ .Values.monitoring.pyroscope.serverAddress }}"
+          - name: PYROSCOPE_APPLICATION_NAME
+            value: "{{ include "book-club.fullname" . }}-backend"
+          {{- end }}
           {{- if .Values.monitoring.tempo.enabled }}
           - name: OTEL_EXPORTER_OTLP_ENDPOINT
             value: "{{ .Values.monitoring.tempo.endpoint }}"
