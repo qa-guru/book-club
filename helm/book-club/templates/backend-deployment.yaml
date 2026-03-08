@@ -31,12 +31,18 @@ spec:
           httpGet:
             path: /api/v1/healthchecks/
             port: http
+            httpHeaders:
+            - name: Host
+              value: localhost
           initialDelaySeconds: 30
           periodSeconds: 10
         readinessProbe:
           httpGet:
             path: /api/v1/healthchecks/
             port: http
+            httpHeaders:
+            - name: Host
+              value: localhost
           initialDelaySeconds: 15
           periodSeconds: 5
         env:
