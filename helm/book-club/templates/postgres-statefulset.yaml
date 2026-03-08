@@ -28,6 +28,9 @@ spec:
           protocol: TCP
         env:
           {{- toYaml .Values.postgres.env | nindent 10 }}
+          # Use subdirectory to avoid lost+found issue with mount points
+          - name: PGDATA
+            value: /var/lib/postgresql/data/pgdata
         volumeMounts:
         - name: postgres-data
           mountPath: /var/lib/postgresql/data
