@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   registry: harbor.example.com
   project: book-club
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: latest
 
 # Observability configuration
