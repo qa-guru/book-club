@@ -4,7 +4,7 @@ image:
   registry: harbor.example.com
   project: book-club
   pullPolicy: Always
-  tag: latest
+  tag: 1.0.1
 
 # Observability configuration
 monitoring:
