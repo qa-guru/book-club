@@ -114,7 +114,7 @@ const closeMenu = () => {
   right: 0;
   width: 100%;
   z-index: 100;
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-1) var(--space-4);
   border-bottom: 1px solid rgba(245, 240, 232, 0.08);
 }
 
@@ -126,7 +126,7 @@ const closeMenu = () => {
   margin: 0 auto;
   width: 100%;
   position: relative;
-  min-height: 44px;
+  min-height: 40px;
 }
 
 .logo {
@@ -150,6 +150,7 @@ const closeMenu = () => {
   max-width: 130px;
   object-fit: contain;
   vertical-align: middle;
+  transform: translateY(3px);
 }
 
 .logo:focus-visible {
