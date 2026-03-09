@@ -44,7 +44,7 @@ if OTEL_ENABLED:
         from opentelemetry.sdk.trace.export import BatchSpanProcessor
         from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
         from opentelemetry.instrumentation.django import DjangoInstrumentor
-        from opentelemetry.instrumentation.psycopg import PsycopgInstrumentor
+        from opentelemetry.instrumentation.psycopg2 import Psycopg2Instrumentor
         from opentelemetry.sdk.resources import Resource
 
         # resource with service information
@@ -69,7 +69,7 @@ if OTEL_ENABLED:
         )
         
         DjangoInstrumentor().instrument()
-        PsycopgInstrumentor().instrument()
+        Psycopg2Instrumentor().instrument()
 
         print(f"[OBSERVABILITY] OpenTelemetry configured successfully", file=sys.stderr)
 

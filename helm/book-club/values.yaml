@@ -27,8 +27,7 @@ monitoring:
   # Tempo distributed tracing
   tempo:
     enabled: true  # Enable when you have Tempo installed
-    endpoint: http://tempo.monitoring.svc.cluster.local:4317  # gRPC endpoint for backend
-    httpEndpoint: http://tempo.monitoring.svc.cluster.local:4318  # HTTP endpoint for frontend
+    endpoint: http://tempo.monitoring.svc.cluster.local:4317
 
 imagePullSecrets:
   - name: harbor-registry-secret

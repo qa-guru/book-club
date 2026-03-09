@@ -25,10 +25,6 @@ spec:
     spec:
       imagePullSecrets:
         {{- toYaml .Values.imagePullSecrets | nindent 8 }}
-      volumes:
-      - name: config
-        configMap:
-          name: {{ include "book-club.fullname" . }}-frontend-config
       containers:
       - name: frontend
         image: "{{ .Values.image.registry }}/{{ .Values.image.project }}/{{ .Values.frontend.name }}:{{ .Values.image.tag }}"
@@ -37,11 +33,6 @@ spec:
         - name: http
           containerPort: {{ .Values.frontend.port }}
           protocol: TCP
-        volumeMounts:
-        - name: config
-          mountPath: /usr/share/nginx/html/config.js
-          subPath: config.js
-          readOnly: true
         livenessProbe:
           httpGet:
             path: /
