@@ -134,7 +134,10 @@ const selectOption = (size: number) => {
   background-color: var(--color-input-bg);
   border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast);
+  transition:
+    background-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast);
   font-family: var(--font-body);
   font-weight: var(--weight-medium);
   color: var(--color-text);
@@ -206,7 +209,9 @@ const selectOption = (size: number) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: box-shadow var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  transition:
+    box-shadow var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
   box-shadow: var(--shadow-sm);
   font-family: var(--font-body);
 }
@@ -246,7 +251,10 @@ const selectOption = (size: number) => {
   max-height: 0;
   opacity: 0;
   visibility: hidden;
-  transition: max-height var(--duration-normal) var(--ease-out), opacity var(--duration-normal), visibility var(--duration-normal);
+  transition:
+    max-height var(--duration-normal) var(--ease-out),
+    opacity var(--duration-normal),
+    visibility var(--duration-normal);
 }
 
 .custom-select.open .select-options {
@@ -262,7 +270,9 @@ const selectOption = (size: number) => {
 .select-option {
   padding: var(--space-3) var(--space-5);
   cursor: pointer;
-  transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast);
   color: var(--color-text);
   display: flex;
   align-items: center;

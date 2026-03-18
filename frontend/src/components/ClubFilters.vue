@@ -123,7 +123,9 @@ const applyFilter = (filter: 'all' | 'member' | 'owner') => {
   color: var(--color-input-text);
   box-sizing: border-box;
   min-width: 0;
-  transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .search-input::placeholder {
@@ -152,7 +154,9 @@ const applyFilter = (filter: 'all' | 'member' | 'owner') => {
   font-weight: var(--weight-medium);
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
 }
 
 .search-button:hover {
@@ -183,7 +187,9 @@ const applyFilter = (filter: 'all' | 'member' | 'owner') => {
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
 }
 
 .filter-option:hover {

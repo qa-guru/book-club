@@ -239,7 +239,9 @@ onMounted(() => {
   font-size: clamp(var(--text-base), 2vw, var(--text-lg));
   font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
   padding: 0 var(--space-6);
   display: flex;
   align-items: center;

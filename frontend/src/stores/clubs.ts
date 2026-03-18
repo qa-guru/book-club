@@ -30,10 +30,7 @@ export const useClubsStore = defineStore('clubs', {
   }),
 
   actions: {
-    async _fetchClubsWithParams(
-      params: Record<string, string | number>,
-      errorMessage: string,
-    ) {
+    async _fetchClubsWithParams(params: Record<string, string | number>, errorMessage: string) {
       this.isLoading = true
       this.error = null
       try {
@@ -80,10 +77,7 @@ export const useClubsStore = defineStore('clubs', {
     ) {
       const params: Record<string, string | number> = { page, page_size: pageSize }
       if (type !== 'all') params.membership = type
-      await this._fetchClubsWithParams(
-        params,
-        'Ошибка при фильтрации клубов',
-      )
+      await this._fetchClubsWithParams(params, 'Ошибка при фильтрации клубов')
     },
 
     async nextPage() {

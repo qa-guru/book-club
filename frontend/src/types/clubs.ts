@@ -31,7 +31,6 @@ export interface PaginatedClubList {
   results: Club[]
 }
 
-
 export interface PaginatedBookReviewList {
   count: number
   next: string | null

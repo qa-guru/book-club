@@ -123,7 +123,9 @@ const truncateText = (text: string, maxLength: number = 150) => {
   color: var(--color-text-inverse);
   display: flex;
   flex-direction: column;
-  transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
 }
 
 .club-card:hover {
@@ -190,7 +192,9 @@ const truncateText = (text: string, maxLength: number = 150) => {
   font-size: clamp(var(--text-base), 2vw, var(--text-lg));
   font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
 }
 
 .join-btn {

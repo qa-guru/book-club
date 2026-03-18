@@ -148,7 +148,12 @@ const onSubmit = handleSubmit(async (values) => {
       </div>
 
       <div class="form-actions">
-        <button type="submit" :disabled="isLoading" class="submit-btn" :class="{ 'btn-loading': isLoading }">
+        <button
+          type="submit"
+          :disabled="isLoading"
+          class="submit-btn"
+          :class="{ 'btn-loading': isLoading }"
+        >
           {{ isLoading ? 'Сохранение...' : clubId ? 'Сохранить изменения' : 'Создать клуб' }}
         </button>
         <button type="button" @click="router.push('/')" :disabled="isLoading" class="cancel-btn">
@@ -199,7 +204,9 @@ form {
   font-size: clamp(var(--text-sm), 3vw, var(--text-base));
   color: var(--color-input-text);
   box-sizing: border-box;
-  transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .form-input {
@@ -253,7 +260,9 @@ form {
   font-size: clamp(var(--text-base), 3vw, var(--text-lg));
   font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
   padding: 0 var(--space-8);
 }
 

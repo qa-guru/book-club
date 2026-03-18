@@ -13,7 +13,7 @@
   --color-text-muted: rgba(245, 240, 232, 0.75);
   --color-text-muted-strong: rgba(245, 240, 232, 0.55);
 
-  --color-primary: #20AEE3;
+  --color-primary: #20aee3;
   --color-primary-hover: #1a96c7;
   --color-primary-active: #157a9e;
   --color-primary-rgb: 32, 174, 227;
@@ -131,7 +131,10 @@ select:focus-visible {
 }
 
 /* ——— Типографика по умолчанию ——— */
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: var(--font-heading);
   font-weight: var(--weight-medium);
   line-height: var(--leading-tight);
@@ -167,7 +170,9 @@ p:last-child {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

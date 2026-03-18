@@ -212,15 +212,15 @@ onMounted(() => {
             <span class="stars-preview">{{ getStars(reviewForm.assessment) }}</span>
           </div> -->
           <div class="rating-input">
-    <input
-      v-model.number="reviewForm.assessment"
-      type="number"
-      id="assessment"
-      min="1"
-      max="5"
-      placeholder="Оценка от 1 до 5"
-    />
-  </div>
+            <input
+              v-model.number="reviewForm.assessment"
+              type="number"
+              id="assessment"
+              min="1"
+              max="5"
+              placeholder="Оценка от 1 до 5"
+            />
+          </div>
         </div>
 
         <div class="form-group">
@@ -339,7 +339,9 @@ onMounted(() => {
   font-size: var(--text-base);
   font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
   white-space: nowrap;
 }
 
@@ -458,7 +460,9 @@ onMounted(() => {
   font-size: var(--text-base);
   font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
 }
 
 .save-btn:hover:not(:disabled) {
@@ -487,7 +491,10 @@ onMounted(() => {
   font-size: var(--text-base);
   font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: background-color var(--duration-normal) var(--ease-out), color var(--duration-normal), transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-normal) var(--ease-out),
+    color var(--duration-normal),
+    transform var(--duration-fast) var(--ease-out);
 }
 
 .cancel-btn:hover:not(:disabled) {
@@ -616,7 +623,9 @@ onMounted(() => {
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: background-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
 }
 
 .edit-review-btn {

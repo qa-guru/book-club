@@ -117,7 +117,9 @@ async function handleSubmit() {
   font-size: clamp(var(--text-sm), 3vw, var(--text-base));
   color: var(--color-input-text);
   box-sizing: border-box;
-  transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .form-group input::placeholder {
@@ -144,7 +146,9 @@ async function handleSubmit() {
   display: block;
   margin: var(--space-8) auto 0;
   cursor: pointer;
-  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
 }
 
 .submit-btn:hover {

@@ -305,7 +305,9 @@ const updateProfile = async () => {
   font-size: clamp(var(--text-base), 3vw, var(--text-lg));
   font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
 }
 
 .edit-btn:hover {
@@ -329,7 +331,9 @@ const updateProfile = async () => {
   font-size: clamp(var(--text-base), 3vw, var(--text-lg));
   font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
 }
 
 .logout-btn:hover {
@@ -385,7 +389,9 @@ const updateProfile = async () => {
   font-size: clamp(var(--text-sm), 3vw, var(--text-base));
   color: var(--color-input-text);
   box-sizing: border-box;
-  transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .form-group input::placeholder {
@@ -416,7 +422,9 @@ const updateProfile = async () => {
   font-size: clamp(var(--text-base), 3vw, var(--text-lg));
   font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: background-color var(--duration-normal) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
 }
 
 .save-btn:hover:not(:disabled) {
@@ -445,7 +453,10 @@ const updateProfile = async () => {
   font-size: clamp(var(--text-base), 3vw, var(--text-lg));
   font-weight: var(--weight-medium);
   cursor: pointer;
-  transition: background-color var(--duration-normal) var(--ease-out), color var(--duration-normal), transform var(--duration-fast) var(--ease-out);
+  transition:
+    background-color var(--duration-normal) var(--ease-out),
+    color var(--duration-normal),
+    transform var(--duration-fast) var(--ease-out);
 }
 
 .cancel-btn:hover:not(:disabled) {
