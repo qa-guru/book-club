@@ -203,7 +203,7 @@ dependencies = [
     { name = "opentelemetry-api" },
     { name = "opentelemetry-exporter-otlp" },
     { name = "opentelemetry-instrumentation-django" },
-    { name = "opentelemetry-instrumentation-psycopg2" },
+    { name = "opentelemetry-instrumentation-psycopg" },
     { name = "opentelemetry-sdk" },
     { name = "pillow" },
     { name = "psycopg", extra = ["binary"] },
@@ -265,7 +265,7 @@ requires-dist = [
     { name = "opentelemetry-api", specifier = ">=1.20.0" },
     { name = "opentelemetry-exporter-otlp", specifier = ">=1.20.0" },
     { name = "opentelemetry-instrumentation-django", specifier = ">=0.41b0" },
-    { name = "opentelemetry-instrumentation-psycopg2", specifier = ">=0.41b0" },
+    { name = "opentelemetry-instrumentation-psycopg", specifier = ">=0.41b0" },
     { name = "opentelemetry-sdk", specifier = ">=1.20.0" },
     { name = "pillow", specifier = ">=11.2.1" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.2.6" },
@@ -1313,7 +1313,7 @@ wheels = [
 ]
 
 [[package]]
-name = "opentelemetry-instrumentation-psycopg2"
+name = "opentelemetry-instrumentation-psycopg"
 version = "0.61b0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
@@ -1321,9 +1321,9 @@ dependencies = [
     { name = "opentelemetry-instrumentation" },
     { name = "opentelemetry-instrumentation-dbapi" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0e/28/f28d52b1088e7a09761566f8700507b54d3d83a6f9c93c0ce02f53619e83/opentelemetry_instrumentation_psycopg2-0.61b0.tar.gz", hash = "sha256:863ccf9687b71e73dd489c7bb117278768bdf26aa0dafe7dc974a2425e05b5d7", size = 11676, upload-time = "2026-03-04T14:20:41.269Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/99/00/b98148b3054eb8301a56d523de82ee2fd86a047dba38330c2404d85496e3/opentelemetry_instrumentation_psycopg-0.61b0.tar.gz", hash = "sha256:74e9fed3802945f7ae335cffc30fd18cf58c34a4d0619315f799fa21eb5c74ff", size = 11907, upload-time = "2026-03-04T14:20:39.958Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2f/f1/4341d0584c288765c73e28c30ba58e7aedb50c01108f17f947b872657f79/opentelemetry_instrumentation_psycopg2-0.61b0-py3-none-any.whl", hash = "sha256:36b96983beda05c927179bb66b6c72f07a8d9a591f76ce9da88b1dd1587cb083", size = 11491, upload-time = "2026-03-04T14:19:42.018Z" },
+    { url = "https://files.pythonhosted.org/packages/db/2b/3c36bfc6dc82a7c50c769aff407eaf32e688d655bc61a774609d96b55603/opentelemetry_instrumentation_psycopg-0.61b0-py3-none-any.whl", hash = "sha256:a3e242cad56c0ad4f4f872017c73ce7e6c7012081dda6bd0d776c127fedc358a", size = 11662, upload-time = "2026-03-04T14:19:41.108Z" },
 ]
 
 [[package]]

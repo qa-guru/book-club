@@ -44,7 +44,6 @@ if OTEL_ENABLED:
         from opentelemetry.sdk.trace.export import BatchSpanProcessor
         from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
         from opentelemetry.instrumentation.django import DjangoInstrumentor
-        from opentelemetry.instrumentation.psycopg2 import Psycopg2Instrumentor
         from opentelemetry.sdk.resources import Resource
 
         # resource with service information
@@ -68,8 +67,17 @@ if OTEL_ENABLED:
             BatchSpanProcessor(otlp_exporter)
         )
         
+        # Instrument Django
         DjangoInstrumentor().instrument()
-        Psycopg2Instrumentor().instrument()
+        
+        # Try to instrument psycopg (v3) - this project uses psycopg, not psycopg2
+        try:
+            from opentelemetry.instrumentation.psycopg import PsycopgInstrumentor
+            PsycopgInstrumentor().instrument()
+            print(f"[OBSERVABILITY] Psycopg instrumentation enabled", file=sys.stderr)
+        except ImportError:
+            # Psycopg instrumentation not available, continue without it
+            print(f"[OBSERVABILITY] Psycopg instrumentation not available (install opentelemetry-instrumentation-psycopg)", file=sys.stderr)
 
         print(f"[OBSERVABILITY] OpenTelemetry configured successfully", file=sys.stderr)
 

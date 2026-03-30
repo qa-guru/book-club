@@ -10,6 +10,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "app.middleware.real_ip.real_ip_middleware",
+    "app.middleware.trace_context.trace_context_middleware",
     "axes.middleware.AxesMiddleware",
     "django_prometheus.middleware.PrometheusAfterMiddleware",  # Must be last
 ]
