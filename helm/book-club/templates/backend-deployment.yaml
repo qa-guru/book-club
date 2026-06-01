@@ -61,6 +61,10 @@ spec:
               value: localhost
           initialDelaySeconds: 15
           periodSeconds: 5
+        envFrom:
+        - secretRef:
+            name: book-club-secrets
+            optional: true
         env:
           {{- toYaml .Values.backend.env | nindent 10 }}
           {{- if .Values.monitoring.pyroscope.enabled }}

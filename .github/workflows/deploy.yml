@@ -1,0 +1,74 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  REGISTRY: harbor.qa.guru
+  PROJECT: qa-guru-internal
+
+jobs:
+  build-and-push:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Load Harbor credentials from Vault
+        id: vault
+        uses: hashicorp/vault-action@v3
+        continue-on-error: true
+        with:
+          url: https://vault.qa.guru
+          method: approle
+          roleId: ${{ secrets.VAULT_ROLE_ID }}
+          secretId: ${{ secrets.VAULT_SECRET_ID }}
+          secrets: |
+            secret/data/book-club/production harbor_username | HARBOR_USERNAME ;
+            secret/data/book-club/production harbor_password | HARBOR_PASSWORD ;
+            secret/data/book-club/production registry_username | HARBOR_USERNAME ;
+            secret/data/book-club/production registry_password | HARBOR_PASSWORD
+
+      - name: Log in to Harbor
+        shell: bash
+        env:
+          HARBOR_USERNAME: ${{ steps.vault.outputs.HARBOR_USERNAME }}
+          HARBOR_PASSWORD: ${{ steps.vault.outputs.HARBOR_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -n "${HARBOR_USERNAME:-}" ] && [ -n "${HARBOR_PASSWORD:-}" ]; then
+            echo "$HARBOR_PASSWORD" | docker login "$REGISTRY" -u "$HARBOR_USERNAME" --password-stdin
+          elif docker login "$REGISTRY" 2>/dev/null; then
+            echo "Using Harbor credentials from self-hosted runner"
+          else
+            echo "Harbor login failed: set credentials in Vault (book-club/production) or configure docker login on the runner" >&2
+            exit 1
+          fi
+
+      - name: Build and push backend
+        run: |
+          set -euo pipefail
+          IMAGE="${REGISTRY}/${PROJECT}/backend"
+          docker build -f backend/Dockerfile --target web \
+            --build-arg PYTHON_VERSION=3.12 \
+            -t "${IMAGE}:latest" \
+            -t "${IMAGE}:${GITHUB_SHA}" \
+            backend
+          docker push "${IMAGE}:latest"
+          docker push "${IMAGE}:${GITHUB_SHA}"
+
+      - name: Build and push frontend
+        run: |
+          set -euo pipefail
+          IMAGE="${REGISTRY}/${PROJECT}/frontend"
+          docker build -f frontend/Dockerfile \
+            -t "${IMAGE}:latest" \
+            -t "${IMAGE}:${GITHUB_SHA}" \
+            frontend
+          docker push "${IMAGE}:latest"
+          docker push "${IMAGE}:${GITHUB_SHA}"
+
+      - name: Prune local build cache
+        if: always()
+        run: docker image prune -f || true

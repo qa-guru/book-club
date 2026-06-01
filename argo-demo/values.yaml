@@ -3,11 +3,17 @@
 
 image:
   registry: harbor.qa.guru
-  project: book-club
+  project: qa-guru-internal
   pullPolicy: Always
 
 imagePullSecrets:
   - name: harbor-registry-secret
+
+monitoring:
+  pyroscope:
+    enabled: false
+  tempo:
+    enabled: false
 
 backend:
   replicaCount: 3
