@@ -1,8 +1,12 @@
 """
 Observability configuration for Pyroscope and Tempo
 """
+
+import logging
 import os
-import sys
+
+
+logger = logging.getLogger(__name__)
 
 
 # Pyroscope continuous profiling
@@ -10,11 +14,11 @@ PYROSCOPE_ENABLED = os.getenv("PYROSCOPE_ENABLED", "false").lower() == "true"
 PYROSCOPE_SERVER_ADDRESS = os.getenv("PYROSCOPE_SERVER_ADDRESS", "http://pyroscope.monitoring.svc.cluster.local:4040")
 PYROSCOPE_APPLICATION_NAME = os.getenv("PYROSCOPE_APPLICATION_NAME", "book-club-backend")
 
-print(f"[OBSERVABILITY] Pyroscope enabled: {PYROSCOPE_ENABLED}", file=sys.stderr)
+logger.info("Pyroscope enabled: %s", PYROSCOPE_ENABLED)
 
 if PYROSCOPE_ENABLED:
     try:
-        import pyroscope
+        import pyroscope  # type: ignore[import-untyped]
 
         pyroscope.configure(
             application_name=PYROSCOPE_APPLICATION_NAME,
@@ -24,37 +28,38 @@ if PYROSCOPE_ENABLED:
                 "version": os.getenv("APP_VERSION", "unknown"),
             },
         )
-        print(f"[OBSERVABILITY] Pyroscope configured: {PYROSCOPE_SERVER_ADDRESS}", file=sys.stderr)
+        logger.info("Pyroscope configured: %s", PYROSCOPE_SERVER_ADDRESS)
     except ImportError as e:
-        print(f"[OBSERVABILITY] Pyroscope not available: {e}", file=sys.stderr)
-    except Exception as e:
-        print(f"[OBSERVABILITY] Pyroscope error: {e}", file=sys.stderr)
+        logger.warning("Pyroscope not available: %s", e)
 
 
 # tracing
 OTEL_ENDPOINT = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT")
 OTEL_ENABLED = bool(OTEL_ENDPOINT)
 
-print(f"[OBSERVABILITY] OpenTelemetry enabled: {OTEL_ENABLED}, endpoint: {OTEL_ENDPOINT}", file=sys.stderr)
+logger.info("OpenTelemetry enabled: %s, endpoint: %s", OTEL_ENABLED, OTEL_ENDPOINT)
 
 if OTEL_ENABLED:
     try:
         from opentelemetry import trace
-        from opentelemetry.sdk.trace import TracerProvider
-        from opentelemetry.sdk.trace.export import BatchSpanProcessor
         from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
         from opentelemetry.instrumentation.django import DjangoInstrumentor
         from opentelemetry.sdk.resources import Resource
+        from opentelemetry.sdk.trace import TracerProvider
+        from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
         # resource with service information
-        resource = Resource.create({
-            "service.name": os.getenv("OTEL_SERVICE_NAME", "book-club-backend"),
-            "service.version": os.getenv("APP_VERSION", "unknown"),
-            "deployment.environment": os.getenv("ENVIRONMENT", "production"),
-        })
+        resource = Resource.create(
+            {
+                "service.name": os.getenv("OTEL_SERVICE_NAME", "book-club-backend"),
+                "service.version": os.getenv("APP_VERSION", "unknown"),
+                "deployment.environment": os.getenv("ENVIRONMENT", "production"),
+            }
+        )
 
         # tracer provider
-        trace.set_tracer_provider(TracerProvider(resource=resource))
+        tracer_provider = TracerProvider(resource=resource)
+        trace.set_tracer_provider(tracer_provider)
 
         # OTLP exporter
         otlp_exporter = OTLPSpanExporter(
@@ -63,25 +68,22 @@ if OTEL_ENABLED:
         )
 
         # span processor
-        trace.get_tracer_provider().add_span_processor(
-            BatchSpanProcessor(otlp_exporter)
-        )
-        
+        tracer_provider.add_span_processor(BatchSpanProcessor(otlp_exporter))
+
         # Instrument Django
         DjangoInstrumentor().instrument()
-        
+
         # Try to instrument psycopg (v3) - this project uses psycopg, not psycopg2
         try:
             from opentelemetry.instrumentation.psycopg import PsycopgInstrumentor
+
             PsycopgInstrumentor().instrument()
-            print(f"[OBSERVABILITY] Psycopg instrumentation enabled", file=sys.stderr)
+            logger.info("Psycopg instrumentation enabled")
         except ImportError:
             # Psycopg instrumentation not available, continue without it
-            print(f"[OBSERVABILITY] Psycopg instrumentation not available (install opentelemetry-instrumentation-psycopg)", file=sys.stderr)
+            logger.info("Psycopg instrumentation not available (install opentelemetry-instrumentation-psycopg)")
 
-        print(f"[OBSERVABILITY] OpenTelemetry configured successfully", file=sys.stderr)
+        logger.info("OpenTelemetry configured successfully")
 
     except ImportError as e:
-        print(f"[OBSERVABILITY] OpenTelemetry not available: {e}", file=sys.stderr)
-    except Exception as e:
-        print(f"[OBSERVABILITY] OpenTelemetry error: {e}", file=sys.stderr)
+        logger.warning("OpenTelemetry not available: %s", e)
