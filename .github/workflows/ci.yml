@@ -9,8 +9,14 @@ jobs:
       - uses: actions/checkout@v4
       - name: cleanup docker cache
         run: |
-          docker system prune -af --volumes || true
+          docker system prune -af || true
       - name: run containers
         run: |
-          docker compose down --remove-orphans || true
-          docker compose up -d --build
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans || true
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+      - name: wait for backend
+        run: |
+          until curl -fsS http://127.0.0.1:8000/api/v1/healthchecks/ >/dev/null; do sleep 2; done
+      - name: wait for frontend
+        run: |
+          until curl -fsS http://127.0.0.1:8100/ >/dev/null; do sleep 2; done
