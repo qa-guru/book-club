@@ -42,3 +42,5 @@ jobs:
           curl -fsS --connect-timeout 5 --max-time 15 http://127.0.0.1:8100/api/v1/healthchecks/ >/dev/null
           curl -fsS --connect-timeout 5 --max-time 15 http://127.0.0.1/ -H 'Host: book-club.qa.guru' >/dev/null
           curl -fsS --connect-timeout 5 --max-time 15 http://127.0.0.1/api/v1/healthchecks/ -H 'Host: book-club.qa.guru' >/dev/null
+          curl -fsS --connect-timeout 5 --max-time 15 http://book-club.qa.guru/ >/dev/null
+          curl -fsS --connect-timeout 5 --max-time 15 http://book-club.qa.guru/api/v1/healthchecks/ >/dev/null
