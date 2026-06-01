@@ -14,8 +14,6 @@ services:
     build:
       context: ./frontend
       dockerfile: ./Dockerfile
-    ports:
-      - "8100:80"
     networks:
       - bookclub
     depends_on:
@@ -27,8 +25,6 @@ services:
       target: web
       args: *default-build-args
     environment: *default-environment
-    ports:
-      - "8000:8000"
     networks:
       - bookclub
     depends_on:

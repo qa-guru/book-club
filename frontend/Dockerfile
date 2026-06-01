@@ -1,8 +1,8 @@
 FROM node:22 AS build-stage
 WORKDIR /app
-COPY package*.json ./
-RUN npm install -g pnpm
-RUN pnpm install
+RUN corepack enable && corepack prepare pnpm@9 --activate
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm run build
 

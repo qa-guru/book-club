@@ -9,4 +9,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: run containers
         run: |
-         docker compose up -d --build
+          docker compose down --remove-orphans || true
+          docker compose up -d --build
