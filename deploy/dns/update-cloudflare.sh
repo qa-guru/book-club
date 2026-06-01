@@ -6,7 +6,6 @@ TARGET_IP="${2:?target IP required}"
 TOKEN="${CLOUDFLARE_API_TOKEN:?CLOUDFLARE_API_TOKEN is required}"
 
 ZONE_NAME="${DOMAIN#*.}"
-RECORD_NAME="${DOMAIN%%.*}"
 
 api() {
   local method="$1"
@@ -25,22 +24,23 @@ api() {
   fi
 }
 
-ZONE_ID="$(api GET "/zones?name=${ZONE_NAME}" | jq -r '.result[0].id // empty')"
+ZONE_ID="$(api GET "/zones?name=${ZONE_NAME}" | python3 -c "import json,sys; r=json.load(sys.stdin)['result']; print(r[0]['id'] if r else '')")"
 if [ -z "$ZONE_ID" ]; then
   echo "Zone ${ZONE_NAME} not found in Cloudflare"
   exit 1
 fi
 
 RECORDS="$(api GET "/zones/${ZONE_ID}/dns_records?name=${DOMAIN}")"
-RECORD_ID="$(echo "$RECORDS" | jq -r '.result[0].id // empty')"
-RECORD_TYPE="$(echo "$RECORDS" | jq -r '.result[0].type // empty')"
+read -r RECORD_ID RECORD_TYPE <<<"$(python3 -c "
+import json, sys
+records = json.load(sys.stdin)['result']
+if records:
+    print(records[0]['id'], records[0]['type'])
+else:
+    print('', '')
+" <<<"$RECORDS")"
 
-payload="$(jq -nc \
-  --arg type "A" \
-  --arg name "$DOMAIN" \
-  --arg content "$TARGET_IP" \
-  --argjson proxied false \
-  '{type:$type,name:$name,content:$content,ttl:60,proxied:$proxied}')"
+payload="$(python3 -c 'import json, sys; print(json.dumps({"type":"A","name":sys.argv[1],"content":sys.argv[2],"ttl":60,"proxied":False}))' "$DOMAIN" "$TARGET_IP")"
 
 if [ -n "$RECORD_ID" ]; then
   api PATCH "/zones/${ZONE_ID}/dns_records/${RECORD_ID}" "$payload" >/dev/null
