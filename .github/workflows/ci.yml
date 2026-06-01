@@ -42,5 +42,17 @@ jobs:
           curl -fsS --connect-timeout 5 --max-time 15 http://127.0.0.1:8100/api/v1/healthchecks/ >/dev/null
           curl -fsS --connect-timeout 5 --max-time 15 http://127.0.0.1/ -H 'Host: book-club.qa.guru' >/dev/null
           curl -fsS --connect-timeout 5 --max-time 15 http://127.0.0.1/api/v1/healthchecks/ -H 'Host: book-club.qa.guru' >/dev/null
-          curl -fsS --connect-timeout 5 --max-time 15 http://book-club.qa.guru/ >/dev/null
-          curl -fsS --connect-timeout 5 --max-time 15 http://book-club.qa.guru/api/v1/healthchecks/ >/dev/null
+      - name: check DNS routing
+        run: |
+          RUNNER_IP="$(curl -fsS --max-time 5 ifconfig.me || true)"
+          DNS_IP="$(dig +short book-club.qa.guru A | tail -1)"
+          echo "Runner public IP: ${RUNNER_IP:-unknown}"
+          echo "book-club.qa.guru DNS A: ${DNS_IP:-unknown}"
+          if [ -n "$RUNNER_IP" ] && [ -n "$DNS_IP" ] && [ "$RUNNER_IP" != "$DNS_IP" ]; then
+            echo "::warning::DNS for book-club.qa.guru points to ${DNS_IP}, but this runner is ${RUNNER_IP}. Update the A record to the runner IP."
+          fi
+          if curl -fsS --connect-timeout 5 --max-time 15 http://book-club.qa.guru/api/v1/healthchecks/ >/dev/null; then
+            echo "Public domain is reachable from runner"
+          else
+            echo "::warning::Public domain is not reachable from runner; fix DNS or edge proxy in front of port 80"
+          fi
