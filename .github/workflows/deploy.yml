@@ -6,8 +6,10 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY: harbor.qa.guru
-  PROJECT: qa-guru-internal
+  VAULT_ADDR: https://vault.qa.guru
+  HARBOR_REGISTRY: harbor.qa.guru
+  HARBOR_PROJECT: qa-guru-internal
+  IMAGE_TAG: ${{ github.sha }}
 
 jobs:
   build-and-push:
@@ -15,60 +17,65 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Load Harbor credentials from Vault
-        id: vault
+      - name: Import Harbor credentials from Vault
         uses: hashicorp/vault-action@v3
-        continue-on-error: true
         with:
-          url: https://vault.qa.guru
+          url: ${{ env.VAULT_ADDR }}
           method: approle
           roleId: ${{ secrets.VAULT_ROLE_ID }}
           secretId: ${{ secrets.VAULT_SECRET_ID }}
           secrets: |
-            secret/data/book-club/production harbor_username | HARBOR_USERNAME ;
-            secret/data/book-club/production harbor_password | HARBOR_PASSWORD ;
-            secret/data/book-club/production registry_username | HARBOR_USERNAME ;
-            secret/data/book-club/production registry_password | HARBOR_PASSWORD
+            kv/data/arc/harbor_credentials username | HARBOR_USERNAME ;
+            kv/data/arc/harbor_credentials password | HARBOR_PASSWORD
 
       - name: Log in to Harbor
-        shell: bash
-        env:
-          HARBOR_USERNAME: ${{ steps.vault.outputs.HARBOR_USERNAME }}
-          HARBOR_PASSWORD: ${{ steps.vault.outputs.HARBOR_PASSWORD }}
-        run: |
-          set -euo pipefail
-          if [ -n "${HARBOR_USERNAME:-}" ] && [ -n "${HARBOR_PASSWORD:-}" ]; then
-            echo "$HARBOR_PASSWORD" | docker login "$REGISTRY" -u "$HARBOR_USERNAME" --password-stdin
-          elif docker login "$REGISTRY" 2>/dev/null; then
-            echo "Using Harbor credentials from self-hosted runner"
-          else
-            echo "Harbor login failed: set credentials in Vault (book-club/production) or configure docker login on the runner" >&2
-            exit 1
-          fi
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.HARBOR_REGISTRY }}
+          username: ${{ env.HARBOR_USERNAME }}
+          password: ${{ env.HARBOR_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Build and push backend
-        run: |
-          set -euo pipefail
-          IMAGE="${REGISTRY}/${PROJECT}/backend"
-          docker build -f backend/Dockerfile --target web \
-            --build-arg PYTHON_VERSION=3.12 \
-            -t "${IMAGE}:latest" \
-            -t "${IMAGE}:${GITHUB_SHA}" \
-            backend
-          docker push "${IMAGE}:latest"
-          docker push "${IMAGE}:${GITHUB_SHA}"
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          target: web
+          push: true
+          tags: |
+            ${{ env.HARBOR_REGISTRY }}/${{ env.HARBOR_PROJECT }}/backend:${{ env.IMAGE_TAG }}
+            ${{ env.HARBOR_REGISTRY }}/${{ env.HARBOR_PROJECT }}/backend:latest
+          build-args: |
+            PYTHON_VERSION=3.12
 
       - name: Build and push frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: |
+            ${{ env.HARBOR_REGISTRY }}/${{ env.HARBOR_PROJECT }}/frontend:${{ env.IMAGE_TAG }}
+            ${{ env.HARBOR_REGISTRY }}/${{ env.HARBOR_PROJECT }}/frontend:latest
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: "3.14.0"
+
+      - name: Package and push Helm chart
         run: |
           set -euo pipefail
-          IMAGE="${REGISTRY}/${PROJECT}/frontend"
-          docker build -f frontend/Dockerfile \
-            -t "${IMAGE}:latest" \
-            -t "${IMAGE}:${GITHUB_SHA}" \
-            frontend
-          docker push "${IMAGE}:latest"
-          docker push "${IMAGE}:${GITHUB_SHA}"
+          cd helm
+          helm package book-club --version "1.0.${GITHUB_RUN_NUMBER}" --app-version "${IMAGE_TAG}"
+          printf '%s\n' "${HARBOR_PASSWORD}" | helm registry login "${HARBOR_REGISTRY}" \
+            --username "${HARBOR_USERNAME}" \
+            --password-stdin
+          helm push "book-club-1.0.${GITHUB_RUN_NUMBER}.tgz" "oci://${HARBOR_REGISTRY}/${HARBOR_PROJECT}"
 
-      - name: Prune local build cache
+      - name: Prune local Docker cache
         if: always()
-        run: docker image prune -f || true
+        run: docker system prune -af --volumes || true
