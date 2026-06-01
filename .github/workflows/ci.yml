@@ -44,15 +44,52 @@ jobs:
           curl -fsS --connect-timeout 5 --max-time 15 http://127.0.0.1/api/v1/healthchecks/ -H 'Host: book-club.qa.guru' >/dev/null
       - name: check DNS routing
         run: |
-          RUNNER_IP="$(curl -fsS --max-time 5 ifconfig.me || true)"
+          RUNNER_IPV4="$(curl -4 -fsS --max-time 5 ifconfig.me || true)"
+          RUNNER_IPV6="$(curl -6 -fsS --max-time 5 ifconfig.me || true)"
           DNS_IP="$(dig +short book-club.qa.guru A | tail -1)"
-          echo "Runner public IP: ${RUNNER_IP:-unknown}"
+          echo "Runner public IPv4: ${RUNNER_IPV4:-unknown}"
+          echo "Runner public IPv6: ${RUNNER_IPV6:-unknown}"
           echo "book-club.qa.guru DNS A: ${DNS_IP:-unknown}"
-          if [ -n "$RUNNER_IP" ] && [ -n "$DNS_IP" ] && [ "$RUNNER_IP" != "$DNS_IP" ]; then
-            echo "::warning::DNS for book-club.qa.guru points to ${DNS_IP}, but this runner is ${RUNNER_IP}. Update the A record to the runner IP."
+          if [ -n "$RUNNER_IPV4" ] && [ -n "$DNS_IP" ] && [ "$RUNNER_IPV4" != "$DNS_IP" ]; then
+            echo "::warning::DNS for book-club.qa.guru points to ${DNS_IP}, but runner IPv4 is ${RUNNER_IPV4}."
           fi
           if curl -fsS --connect-timeout 5 --max-time 15 http://book-club.qa.guru/api/v1/healthchecks/ >/dev/null; then
             echo "Public domain is reachable from runner"
           else
             echo "::warning::Public domain is not reachable from runner; fix DNS or edge proxy in front of port 80"
           fi
+      - name: Load Hetzner DNS token from Vault
+        id: vault_dns
+        uses: hashicorp/vault-action@v3
+        continue-on-error: true
+        with:
+          url: https://vault.qa.guru
+          method: approle
+          roleId: ${{ secrets.VAULT_ROLE_ID }}
+          secretId: ${{ secrets.VAULT_SECRET_ID }}
+          secrets: |
+            kv/data/arc/dns_credentials token | HETZNER_DNS_TOKEN ;
+            kv/data/arc/hetzner_dns token | HETZNER_DNS_TOKEN ;
+            kv/data/arc/dns token | HETZNER_DNS_TOKEN
+      - name: Update DNS to runner IPv4
+        env:
+          VAULT_DNS_TOKEN: ${{ steps.vault_dns.outputs.HETZNER_DNS_TOKEN }}
+          GH_DNS_TOKEN: ${{ secrets.HETZNER_DNS_TOKEN }}
+        run: |
+          set -euo pipefail
+          TARGET_IP="$(curl -4 -fsS --max-time 5 ifconfig.me)"
+          CURRENT_IP="$(dig +short book-club.qa.guru A | tail -1)"
+          if [ "$TARGET_IP" = "$CURRENT_IP" ]; then
+            echo "DNS already points to runner IPv4 (${TARGET_IP})"
+            exit 0
+          fi
+          export HETZNER_DNS_TOKEN="${VAULT_DNS_TOKEN:-${GH_DNS_TOKEN:-}}"
+          if [ -z "$HETZNER_DNS_TOKEN" ]; then
+            echo "::warning::Hetzner DNS token missing in Vault (kv/data/arc/dns_credentials) or repo secret HETZNER_DNS_TOKEN"
+            exit 0
+          fi
+          chmod +x deploy/dns/update-hetzner.sh
+          deploy/dns/update-hetzner.sh book-club.qa.guru "$TARGET_IP"
+          sleep 5
+          dig +short book-club.qa.guru A | tail -1
+          curl -fsS --connect-timeout 10 --max-time 20 http://book-club.qa.guru/api/v1/healthchecks/
