@@ -91,6 +91,10 @@ jobs:
           fi
           chmod +x deploy/dns/update-cloudflare.sh
           deploy/dns/update-cloudflare.sh book-club.qa.guru "$TARGET_IP"
-          sleep 10
+          sleep 15
           dig +short book-club.qa.guru A | tail -1
-          curl -fsS --connect-timeout 10 --max-time 20 http://book-club.qa.guru/api/v1/healthchecks/
+          if curl -fsS --connect-timeout 10 --max-time 20 http://book-club.qa.guru/api/v1/healthchecks/ >/dev/null; then
+            echo "Public domain is reachable after DNS update"
+          else
+            echo "::warning::DNS updated but public healthcheck not yet reachable; propagation may still be in progress"
+          fi

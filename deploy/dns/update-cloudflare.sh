@@ -42,9 +42,13 @@ else:
 
 payload="$(python3 -c 'import json, sys; print(json.dumps({"type":"A","name":sys.argv[1],"content":sys.argv[2],"ttl":60,"proxied":False}))' "$DOMAIN" "$TARGET_IP")"
 
-if [ -n "$RECORD_ID" ]; then
+if [ -n "$RECORD_ID" ] && [ "$RECORD_TYPE" = "A" ]; then
   api PATCH "/zones/${ZONE_ID}/dns_records/${RECORD_ID}" "$payload" >/dev/null
-  echo "Updated ${RECORD_TYPE} record ${DOMAIN} -> ${TARGET_IP}"
+  echo "Updated A record ${DOMAIN} -> ${TARGET_IP}"
+elif [ -n "$RECORD_ID" ]; then
+  api DELETE "/zones/${ZONE_ID}/dns_records/${RECORD_ID}" >/dev/null
+  api POST "/zones/${ZONE_ID}/dns_records" "$payload" >/dev/null
+  echo "Replaced ${RECORD_TYPE} record with A ${DOMAIN} -> ${TARGET_IP}"
 else
   api POST "/zones/${ZONE_ID}/dns_records" "$payload" >/dev/null
   echo "Created A record ${DOMAIN} -> ${TARGET_IP}"
