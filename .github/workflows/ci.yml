@@ -20,28 +20,21 @@ jobs:
       - name: wait for frontend
         run: |
           until curl -fsS http://127.0.0.1:8100/ >/dev/null; do sleep 2; done
-      - name: configure host nginx
+      - name: configure host nginx and SSL
         run: |
-          set -euo pipefail
-          if ! command -v nginx >/dev/null; then
-            echo "nginx is not installed on runner, skipping host config"
-            exit 0
-          fi
-          if ! sudo -n true 2>/dev/null; then
-            echo "passwordless sudo is required to reload host nginx"
-            exit 0
-          fi
-          sudo mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
-          sudo cp deploy/nginx/book-club.conf /etc/nginx/sites-available/book-club.qa.guru
-          sudo ln -sf /etc/nginx/sites-available/book-club.qa.guru /etc/nginx/sites-enabled/book-club.qa.guru
-          sudo nginx -t
-          sudo systemctl reload nginx
+          chmod +x deploy/nginx/setup-ssl.sh
+          deploy/nginx/setup-ssl.sh
       - name: verify public site
         run: |
           curl -fsS --connect-timeout 5 --max-time 15 http://127.0.0.1:8100/ >/dev/null
           curl -fsS --connect-timeout 5 --max-time 15 http://127.0.0.1:8100/api/v1/healthchecks/ >/dev/null
           curl -fsS --connect-timeout 5 --max-time 15 http://127.0.0.1/ -H 'Host: book-club.qa.guru' >/dev/null
           curl -fsS --connect-timeout 5 --max-time 15 http://127.0.0.1/api/v1/healthchecks/ -H 'Host: book-club.qa.guru' >/dev/null
+          if curl -fsS --connect-timeout 5 --max-time 15 https://book-club.qa.guru/api/v1/healthchecks/ >/dev/null; then
+            echo "HTTPS is working with valid certificate"
+          else
+            echo "::warning::HTTPS is not yet working for book-club.qa.guru"
+          fi
       - name: check DNS routing
         run: |
           RUNNER_IPV4="$(curl -4 -fsS --max-time 5 ifconfig.me || true)"
