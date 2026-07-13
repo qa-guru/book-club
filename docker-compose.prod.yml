@@ -1,13 +1,19 @@
 # Production on self-hosted runner: expose app ports for external nginx.
 # Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+# Reboot canon: restart unless-stopped on all prod services (see zero-design-system docs/hetzner-infra-audit/docker-reboot-canon.md).
 
 services:
   frontend:
+    restart: unless-stopped
     ports:
       - "8100:80"
 
   backend:
+    restart: unless-stopped
     ports:
       - "8000:8000"
     environment:
       BASE_URL: https://book-club.qa.guru
+
+  postgres:
+    restart: unless-stopped
