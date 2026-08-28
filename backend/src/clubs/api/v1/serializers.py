@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from drf_spectacular.utils import extend_schema_serializer
 from rest_framework import serializers
 
 from clubs.models import BookReview, Club
@@ -13,14 +14,15 @@ class OwnerSerializer(serializers.ModelSerializer):
         fields = ["id", "username"]
 
 
-class UserSerializer(serializers.ModelSerializer):
+@extend_schema_serializer(component_name="ReviewAuthor")
+class ReviewAuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "username"]
 
 
 class BookReviewSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
+    user = ReviewAuthorSerializer(read_only=True)
 
     class Meta:
         model = BookReview
