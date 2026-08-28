@@ -60,9 +60,15 @@ api() {
   fi
 }
 
+PYTHON="$(command -v python3 || command -v python || true)"
+if [[ -z "$PYTHON" ]]; then
+  echo "python3 (or python) is required for Cloudflare JSON parsing" >&2
+  exit 127
+fi
+
 # Longest-suffix zone match (book-club.qa.guru → qa.guru; api.niffler.qa.guru → qa.guru).
 ZONES_JSON="$(api GET "/zones?per_page=50")"
-ZONE_ID="$(DOMAIN="$DOMAIN" python -c "
+ZONE_ID="$(DOMAIN="$DOMAIN" "$PYTHON" -c "
 import json, os, sys
 fqdn = os.environ['DOMAIN'].rstrip('.').lower()
 zones = json.load(sys.stdin).get('result') or []
@@ -80,7 +86,7 @@ if [ -z "$ZONE_ID" ]; then
   exit 1
 fi
 
-ZONE_NAME="$(DOMAIN="$DOMAIN" python -c "
+ZONE_NAME="$(DOMAIN="$DOMAIN" "$PYTHON" -c "
 import json, os, sys
 fqdn = os.environ['DOMAIN'].rstrip('.').lower()
 zones = json.load(sys.stdin).get('result') or []
@@ -94,14 +100,14 @@ print(best_name)
 " <<<"$ZONES_JSON")"
 
 # zone-guard: FQDN must belong to resolved zone (always true after suffix match, assert anyway)
-python -c "
+"$PYTHON" -c "
 fqdn='${DOMAIN}'.rstrip('.').lower()
 zone='${ZONE_NAME}'.rstrip('.').lower()
 assert fqdn == zone or fqdn.endswith('.' + zone), (fqdn, zone)
 "
 
 RECORDS="$(api GET "/zones/${ZONE_ID}/dns_records?name=${DOMAIN}")"
-read -r RECORD_ID RECORD_TYPE RECORD_CONTENT <<<"$(python -c "
+read -r RECORD_ID RECORD_TYPE RECORD_CONTENT <<<"$("$PYTHON" -c "
 import json, sys
 records = json.load(sys.stdin)['result']
 if records:
@@ -111,7 +117,7 @@ else:
     print('', '', '')
 " <<<"$RECORDS")"
 
-payload="$(python -c 'import json, sys; print(json.dumps({"type":"A","name":sys.argv[1],"content":sys.argv[2],"ttl":60,"proxied":False}))' "$DOMAIN" "$TARGET_IP")"
+payload="$("$PYTHON" -c 'import json, sys; print(json.dumps({"type":"A","name":sys.argv[1],"content":sys.argv[2],"ttl":60,"proxied":False}))' "$DOMAIN" "$TARGET_IP")"
 
 plan() {
   if [ -n "$RECORD_ID" ] && [ "$RECORD_TYPE" = "A" ]; then

@@ -85,7 +85,7 @@ jobs:
             exit 0
           fi
           chmod +x deploy/dns/update-cloudflare.sh
-          deploy/dns/update-cloudflare.sh book-club.qa.guru "$TARGET_IP"
+          deploy/dns/update-cloudflare.sh --apply book-club.qa.guru "$TARGET_IP"
           sleep 15
           dig +short book-club.qa.guru A | tail -1
           if curl -fsS --connect-timeout 10 --max-time 20 http://book-club.qa.guru/api/v1/healthchecks/ >/dev/null; then

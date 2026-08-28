@@ -48,8 +48,8 @@ def test_patch_serializer_accepts_a_single_field() -> None:
 def test_put_rejects_partial_body(api_client: APIClient) -> None:
     response = api_client.put("/api/v1/users/me/", {"username": "alice"}, format="json")
     assert response.status_code == 400
-    assert "firstName" in response.data
-    assert "lastName" in response.data
+    assert "first_name" in response.data
+    assert "last_name" in response.data
     assert "email" in response.data
 
 
@@ -61,7 +61,7 @@ def test_put_replaces_full_profile(api_client: APIClient, api_user: User) -> Non
     assert api_user.last_name == "Reader"
     assert api_user.email == "alice@example.com"
     assert response.data["username"] == "alice"
-    assert "remoteAddr" in response.data
+    assert "remote_addr" in response.data
 
 
 def test_patch_updates_selected_fields(api_client: APIClient, api_user: User) -> None:
